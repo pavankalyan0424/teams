@@ -32,6 +32,6 @@ class _BoardingScreenState extends State<BoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _isSigned ? const HomeScreen() : IntroScreen();
+    return _isSigned ? const HomeScreen() : const IntroScreen();
   }
 }

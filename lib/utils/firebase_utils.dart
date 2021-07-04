@@ -15,11 +15,10 @@ class FirebaseUtils {
     await Firebase.initializeApp();
   }
 
-  static Future googleSignIn() async {
+  static Future<User> googleSignIn() async {
     GoogleSignInAccount _googleSignInAccount;
     final GoogleSignInAccount? googleSignInAccount =
         await _googleSignIn.signIn();
-    // if (googleSignInAccount == null) return;
     _googleSignInAccount = googleSignInAccount!;
     final GoogleSignInAuthentication googleAuth =
         await _googleSignInAccount.authentication;
@@ -27,14 +26,18 @@ class FirebaseUtils {
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
     await auth.signInWithCredential(credentials);
     final User user = auth.currentUser!;
-    print(user.uid);
-    print(user.displayName);
     return user;
   }
 
-  static googleSignOut() async {
-    await _googleSignIn.signOut();
+  static signOut() async {
+    if (await _googleSignIn.isSignedIn()) await _googleSignIn.signOut();
     await auth.signOut();
+  }
+
+  static Future<User> signInAnonymous() async {
+    await auth.signInAnonymously();
+    final User user = auth.currentUser!;
+    return user;
   }
 }
 

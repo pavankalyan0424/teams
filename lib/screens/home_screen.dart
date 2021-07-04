@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: InkWell(
         onTap: () async {
-          FirebaseUtils.googleSignOut();
+          FirebaseUtils.signOut();
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
