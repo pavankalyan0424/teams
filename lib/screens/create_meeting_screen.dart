@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teams/constants/variables.dart';
+import 'package:teams/utils/firebase_utils.dart';
 
 import 'meet_screen.dart';
 
@@ -11,8 +12,6 @@ class CreateMeetingScreen extends StatefulWidget {
 }
 
 class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
-  String code = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,11 +54,19 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
               height: 40,
             ),
             InkWell(
-              onTap: () {
+              onTap: () async {
+                String roomId = '';
+                roomId = FirebaseUtils.roomCollection.doc().id;
+                await FirebaseUtils.roomCollection.doc(roomId).set({
+                  "roomCode": roomId.substring(0, 6),
+                  "users": [FirebaseUtils.auth.currentUser!.uid]
+                });
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MeetScreen(),
+                    builder: (context) => MeetScreen(
+                      meetingCode: roomId.substring(0, 6),
+                    ),
                   ),
                 );
               },
@@ -75,9 +82,8 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color(0xFFBBDEFB),
-                      Color(0xFF90CAF9),
                       Color(0xFF64B5F6),
+                      Color(0xFF90CAF9),
                       Color(0xFF42A5F5),
                     ],
                   ),

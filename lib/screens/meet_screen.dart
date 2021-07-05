@@ -7,7 +7,9 @@ import 'package:teams/constants/keys.dart';
 import 'package:teams/constants/variables.dart';
 
 class MeetScreen extends StatefulWidget {
-  const MeetScreen({Key? key}) : super(key: key);
+  final String meetingCode;
+
+  const MeetScreen({Key? key, required this.meetingCode}) : super(key: key);
 
   @override
   State<MeetScreen> createState() => _MeetScreenState();
@@ -139,6 +141,9 @@ class _MeetScreenState extends State<MeetScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        title: Text(
+          "RoomId: ${widget.meetingCode}",
+        ),
         elevation: 0,
       ),
       body: _joinMeeting

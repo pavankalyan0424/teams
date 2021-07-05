@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:teams/constants/variables.dart';
-
-import 'meet_screen.dart';
+import 'package:teams/utils/firebase_utils.dart';
 
 class JoinMeetingScreen extends StatefulWidget {
   const JoinMeetingScreen({Key? key}) : super(key: key);
@@ -66,12 +65,23 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
               ),
               InkWell(
                 onTap: () async {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MeetScreen(),
-                    ),
-                  );
+                  int found = 0;
+                  FirebaseUtils.roomCollection
+                      .where("roomCode", isEqualTo: roomCode)
+                      .get()
+                      .then((snapShot) {
+                    found = 1;
+                    dynamic data = snapShot.docs[0].data();
+                    print(data["roomCode"]);
+                    // Navigator.pushReplacement(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const MeetScreen(
+                    //       meetingCode: "",
+                    //     ),
+                    //   ),
+                    // );
+                  });
                 },
                 child: Container(
                   child: Center(
