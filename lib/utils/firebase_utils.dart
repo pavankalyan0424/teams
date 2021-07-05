@@ -26,6 +26,7 @@ class FirebaseUtils {
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
     await auth.signInWithCredential(credentials);
     final User user = auth.currentUser!;
+    storeUserDetails(user);
     return user;
   }
 
@@ -37,10 +38,21 @@ class FirebaseUtils {
   static Future<User> signInAnonymous() async {
     await auth.signInAnonymously();
     final User user = auth.currentUser!;
+    storeUserDetails(user);
     return user;
   }
-}
 
-//logo
-//Hey there, welcome back
-//login to your account to continue
+  static Future<void> storeUserDetails(User user) async {
+    userCollection.doc(user.uid).get().then((documentSnapshot) {
+      if (!documentSnapshot.exists) {
+        userCollection.doc(user.uid).set({
+          "username": user.displayName ?? "Guest",
+          "uid": user.uid,
+          "email": user.email ?? "guest@guest.com",
+          "photoURL": user.photoURL ??
+              "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
+        });
+      }
+    });
+  }
+}

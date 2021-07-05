@@ -27,15 +27,34 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
             ),
             child: Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.white,
-                ),
-                child: Image.asset(
-                  "assets/images/teams_icon.jpg",
-                  height: 150,
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.white,
+                    ),
+                    child: Image.asset(
+                      "assets/images/teams_icon.jpg",
+                      height: 150,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Hi There!!!",
+                    style: myStyle(22, Colors.white, FontWeight.w800),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    "Login to your account to continue",
+                    style: myStyle(17, Colors.white, FontWeight.w800),
+                  ),
+                ],
               ),
             ),
           ),
