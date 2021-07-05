@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:teams/constants/variables.dart';
 
+import 'meet_screen.dart';
+
 class CreateMeetingScreen extends StatefulWidget {
   const CreateMeetingScreen({Key? key}) : super(key: key);
 
@@ -13,69 +15,77 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: Text(
-              "Create a code and share it with your friends",
-              style: myStyle(20),
-              textAlign: TextAlign.center,
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Instructions...",
+              style: myStyle(
+                20,
+                Colors.black,
+                FontWeight.w800,
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                "Code:",
-                style: myStyle(30),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              "1. Create meeting by clicking on the button",
+              style: myStyle(
+                18,
+                Colors.black,
+                FontWeight.w800,
               ),
-              Text(
-                code,
-                style: myStyle(30, Colors.purple, FontWeight.w700),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              "2. Click on share button to share with your friends",
+              style: myStyle(
+                18,
+                Colors.black,
+                FontWeight.w800,
               ),
-            ],
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          InkWell(
-            onTap: () {
-              setState(() {
-                // code = Uuid().v1().substring(0, 6);
-              });
-            },
-            child: Container(
-              width: width / 2,
-              height: 50,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFFBBDEFB),
-                    Color(0xFF90CAF9),
-                    Color(0xFF64B5F6),
-                    Color(0xFF42A5F5),
-                  ],
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MeetScreen(),
+                  ),
+                );
+              },
+              child: Container(
+                child: Center(
+                  child: Text(
+                    "Create Meeting",
+                    style: myStyle(20, Colors.white),
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  "Create Code",
-                  style: myStyle(
-                    20,
-                    Colors.white,
+                width: double.maxFinite,
+                height: 64,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xFFBBDEFB),
+                      Color(0xFF90CAF9),
+                      Color(0xFF64B5F6),
+                      Color(0xFF42A5F5),
+                    ],
                   ),
                 ),
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

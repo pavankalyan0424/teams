@@ -54,17 +54,17 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           const BottomNavigationBarItem(
             icon: Icon(
-              Icons.meeting_room,
-              size: 32,
-            ),
-            label: "Create",
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(
               Icons.add,
               size: 32,
             ),
             label: "Join",
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(
+              Icons.meeting_room,
+              size: 32,
+            ),
+            label: "Create",
           ),
         ],
       ),
