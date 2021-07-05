@@ -63,162 +63,116 @@ class _AuthScreenState extends State<AuthScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () async {
-                      try {
-                        SnackBar snackBar = SnackBar(
-                          content: Row(
-                            children: [
-                              Text(
-                                "Loading....",
-                                style: myStyle(
-                                  20,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              const CircularProgressIndicator(),
-                            ],
-                          ),
-                          duration: const Duration(seconds: 1),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        await FirebaseUtils.googleSignIn();
-                        Navigator.pop(context);
-                      } catch (e) {
-                        SnackBar snackBar = SnackBar(
-                          content: Text(
-                            "Please Try Again",
-                            style: myStyle(
-                              20,
-                            ),
-                          ),
-                          duration: const Duration(seconds: 1),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      width: width / 1.5,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.black,
-                      ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Container(
-                              height: 30.0,
-                              width: 30.0,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    'assets/images/google_icon.png',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            Text(
-                              'Sign in with Google',
-                              style: myStyle(
-                                20.0,
-                                Colors.white,
-                                FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  const SignInButton(
+                    imagePath: "assets/images/google_icon.png",
+                    label: "Sign in with Google",
+                    signInFunction: FirebaseUtils.googleSignIn,
                   ),
                   const SizedBox(
                     height: 40,
                   ),
-                  InkWell(
-                    onTap: () async {
-                      try {
-                        SnackBar snackBar = SnackBar(
-                          content: Row(
-                            children: [
-                              Text(
-                                "Loading....",
-                                style: myStyle(
-                                  20,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              const CircularProgressIndicator(),
-                            ],
-                          ),
-                          duration: const Duration(seconds: 1),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        await FirebaseUtils.signInAnonymous();
-                        Navigator.pop(context);
-                      } catch (e) {
-                        SnackBar snackBar = SnackBar(
-                          content: Text(
-                            "Please Try Again",
-                            style: myStyle(
-                              20,
-                            ),
-                          ),
-                          duration: const Duration(seconds: 1),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      width: width / 1.5,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.black,
-                      ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Container(
-                              height: 30.0,
-                              width: 30.0,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    'assets/images/anonymous.jpg',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            Text(
-                              'Sign in Anonymous',
-                              style: myStyle(
-                                20.0,
-                                Colors.white,
-                                FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  const SignInButton(
+                    imagePath: "assets/images/anonymous.jpg",
+                    label: "Sign in Anonymous",
+                    signInFunction: FirebaseUtils.signInAnonymous,
                   ),
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SignInButton extends StatelessWidget {
+  final Function signInFunction;
+  final String imagePath;
+  final String label;
+
+  const SignInButton(
+      {Key? key,
+      required this.signInFunction,
+      required this.label,
+      required this.imagePath})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return InkWell(
+      onTap: () async {
+        try {
+          SnackBar snackBar = SnackBar(
+            content: Row(
+              children: [
+                Text(
+                  "Loading....",
+                  style: myStyle(
+                    20,
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                const CircularProgressIndicator(),
+              ],
+            ),
+            duration: const Duration(seconds: 1),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          await signInFunction();
+          Navigator.pop(context);
+        } catch (e) {
+          SnackBar snackBar = SnackBar(
+            content: Text(
+              "Oops, Please Try Again",
+              style: myStyle(
+                20,
+              ),
+            ),
+            duration: const Duration(seconds: 2),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        width: width / 1.5,
+        height: 60,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.black,
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                height: 30.0,
+                width: 30.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(
+                      imagePath,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+              ),
+              Text(
+                label,
+                style: myStyle(
+                  20.0,
+                  Colors.white,
+                  FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

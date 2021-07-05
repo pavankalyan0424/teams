@@ -44,3 +44,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+*.json
+*.json
+android/app/build/intermediates/flutter/debug/flutter_assets/AssetManifest.json
