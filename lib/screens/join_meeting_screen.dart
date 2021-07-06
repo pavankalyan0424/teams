@@ -3,6 +3,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:teams/constants/variables.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
+import 'meet_screen.dart';
+
 class JoinMeetingScreen extends StatefulWidget {
   const JoinMeetingScreen({Key? key}) : super(key: key);
 
@@ -65,22 +67,69 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
               ),
               InkWell(
                 onTap: () async {
-                  int found = 0;
+                  SnackBar snackBar = SnackBar(
+                    content: Row(
+                      children: [
+                        Text(
+                          "Loading....",
+                          style: myStyle(
+                            20,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        const CircularProgressIndicator(),
+                      ],
+                    ),
+                    duration: const Duration(seconds: 3),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   FirebaseUtils.roomCollection
                       .where("roomCode", isEqualTo: roomCode)
                       .get()
                       .then((snapShot) {
-                    found = 1;
-                    dynamic data = snapShot.docs[0].data();
-                    print(data["roomCode"]);
-                    // Navigator.pushReplacement(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const MeetScreen(
-                    //       meetingCode: "",
-                    //     ),
-                    //   ),
-                    // );
+                    if (snapShot.docs.isEmpty) {
+                      SnackBar snackBar = SnackBar(
+                        content: Text(
+                          "The room code doesn't exist! Please check the code again",
+                          style: myStyle(
+                            20,
+                          ),
+                        ),
+                        duration: const Duration(seconds: 3),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      dynamic data = snapShot.docs[0].data();
+                      String roomId = snapShot.docs[0].id;
+                      List<String> users = data["users"].cast<String>();
+                      if (users.length != 1) {
+                        SnackBar snackBar = SnackBar(
+                          content: Text(
+                            "Meet limit exceeded",
+                            style: myStyle(
+                              20,
+                            ),
+                          ),
+                          duration: const Duration(seconds: 3),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        users.add(FirebaseUtils.auth.currentUser!.uid);
+                        FirebaseUtils.roomCollection
+                            .doc(roomId)
+                            .update({"users": users});
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MeetScreen(
+                              roomCode: roomCode,
+                            ),
+                          ),
+                        );
+                      }
+                    }
                   });
                 },
                 child: Container(
@@ -95,9 +144,8 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Color(0xFFBBDEFB),
-                        Color(0xFF90CAF9),
                         Color(0xFF64B5F6),
+                        Color(0xFF90CAF9),
                         Color(0xFF42A5F5),
                       ],
                     ),

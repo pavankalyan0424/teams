@@ -7,9 +7,9 @@ import 'package:teams/constants/keys.dart';
 import 'package:teams/constants/variables.dart';
 
 class MeetScreen extends StatefulWidget {
-  final String meetingCode;
+  final String roomCode;
 
-  const MeetScreen({Key? key, required this.meetingCode}) : super(key: key);
+  const MeetScreen({Key? key, required this.roomCode}) : super(key: key);
 
   @override
   State<MeetScreen> createState() => _MeetScreenState();
@@ -20,8 +20,8 @@ class _MeetScreenState extends State<MeetScreen> {
   bool _userJoined = false;
   late RtcEngine _engine;
   bool _muted = false;
-  bool _joinMeeting = false;
   bool _loading = true;
+  bool _switch = false;
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _MeetScreenState extends State<MeetScreen> {
     await [Permission.microphone, Permission.camera].request();
     _engine = await RtcEngine.create(APP_ID);
     await _engine.enableVideo();
-    await _engine.enableLocalVideo(true);
+    // await _engine.enableLocalVideo(true);
     _engine.setEventHandler(
       RtcEngineEventHandler(
         joinChannelSuccess: (channel, uid, elapsed) {
@@ -58,10 +58,14 @@ class _MeetScreenState extends State<MeetScreen> {
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
     configuration.dimensions = VideoDimensions(1920, 1080);
     await _engine.setVideoEncoderConfiguration(configuration);
-  }
-
-  Future<void> joinAgoraChannel() async {
-    await _engine.joinChannel(null, "123456", null, 0);
+    try {
+      await _engine.joinChannel(null, widget.roomCode, null, 0);
+    } catch (e) {
+      print("Error");
+    }
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override
@@ -89,7 +93,7 @@ class _MeetScreenState extends State<MeetScreen> {
   Widget _toolbar() {
     return Container(
       alignment: Alignment.bottomCenter,
-      padding: const EdgeInsets.symmetric(vertical: 48),
+      padding: const EdgeInsets.only(top: 15, bottom: 48),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -139,132 +143,87 @@ class _MeetScreenState extends State<MeetScreen> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[800],
+        centerTitle: true,
         title: Text(
-          "RoomId: ${widget.meetingCode}",
+          "RoomId: ${widget.roomCode}",
+          style: myStyle(20, Colors.white, FontWeight.w800),
         ),
         elevation: 0,
       ),
-      body: _joinMeeting
-          ? _loading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Stack(
-                  children: [
-                    Center(
-                      child: _renderRemoteVideo(),
-                    ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        child: Center(
-                          child: _renderLocalPreview(),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: _toolbar(),
-                    ),
-                  ],
-                )
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: const Border(
-                        top:
-                            BorderSide(width: 10.0, color: Colors.indigoAccent),
-                        bottom:
-                            BorderSide(width: 10.0, color: Colors.indigoAccent),
-                        right:
-                            BorderSide(width: 10.0, color: Colors.indigoAccent),
-                        left:
-                            BorderSide(width: 10.0, color: Colors.indigoAccent),
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    height: height / 2.5,
-                    width: width / 1.5,
-                    child: Center(
-                      child: _renderLocalPreview(),
+      body: _loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Stack(
+              children: [
+                Container(
+                  height: height,
+                  width: width,
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.black26,
+                    borderRadius: BorderRadius.circular(15),
+                    border: const Border(
+                      top: BorderSide(width: 4, color: Colors.indigoAccent),
+                      bottom: BorderSide(width: 4, color: Colors.indigoAccent),
+                      right: BorderSide(width: 4, color: Colors.indigoAccent),
+                      left: BorderSide(width: 4, color: Colors.indigoAccent),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
+                  child: Center(
+                      child:
+                          _switch ? _renderLocalVideo() : _renderRemoteVideo()),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      RawMaterialButton(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                        ),
-                        onPressed: _onToggleMute,
-                        child: Icon(
-                          _muted ? Icons.mic_off : Icons.mic,
-                          color: Colors.indigoAccent,
-                          size: 35.0,
-                        ),
-                      ),
-                      Switch(
-                        value: !_muted,
-                        onChanged: (value) {
-                          _onToggleMute();
-                          print(_muted);
+                      InkWell(
+                        onTap: () {
+                          if (_userJoined) {
+                            setState(() {
+                              _switch = !_switch;
+                            });
+                          }
                         },
-                        activeColor: Colors.indigoAccent,
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 25),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border: const Border(
+                              top: BorderSide(
+                                  width: 4, color: Colors.indigoAccent),
+                              bottom: BorderSide(
+                                  width: 4, color: Colors.indigoAccent),
+                              right: BorderSide(
+                                  width: 4, color: Colors.indigoAccent),
+                              left: BorderSide(
+                                  width: 4, color: Colors.indigoAccent),
+                            ),
+                          ),
+                          width: width / 3,
+                          height: height / 5,
+                          child: _switch
+                              ? _renderRemoteVideo()
+                              : _renderLocalVideo(),
+                        ),
                       ),
+                      _toolbar(),
                     ],
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      setState(() {
-                        _joinMeeting = true;
-                      });
-                      joinAgoraChannel().then((value) {
-                        setState(() {
-                          _loading = false;
-                        });
-                      });
-                    },
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                          "Create Meeting",
-                          style: myStyle(20, Colors.white),
-                        ),
-                      ),
-                      width: width / 1.5,
-                      height: 64,
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF64B5F6),
-                            Color(0xFF90CAF9),
-                            Color(0xFF42A5F5),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
     );
   }
 
   // current user video
-  Widget _renderLocalPreview() {
+  Widget _renderLocalVideo() {
     return RtcLocalView.SurfaceView();
   }
 
@@ -273,8 +232,9 @@ class _MeetScreenState extends State<MeetScreen> {
     if (_userJoined) {
       return RtcRemoteView.SurfaceView(uid: _remoteUid);
     } else {
-      return const Text(
-        'Please wait for remote user to join',
+      return Text(
+        'Please wait for other user to join',
+        style: myStyle(20, Colors.white, FontWeight.bold),
         textAlign: TextAlign.center,
       );
     }

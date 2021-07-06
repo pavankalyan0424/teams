@@ -158,7 +158,8 @@ class SignInButton extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(5),
-        width: width / 1.5,
+        margin: const EdgeInsets.all(20),
+        width: double.maxFinite,
         height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),

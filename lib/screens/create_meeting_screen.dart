@@ -55,8 +55,8 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
             ),
             InkWell(
               onTap: () async {
-                String roomId = '';
-                roomId = FirebaseUtils.roomCollection.doc().id;
+                print("buttonTapped");
+                String roomId = FirebaseUtils.roomCollection.doc().id;
                 await FirebaseUtils.roomCollection.doc(roomId).set({
                   "roomCode": roomId.substring(0, 6),
                   "users": [FirebaseUtils.auth.currentUser!.uid]
@@ -65,7 +65,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MeetScreen(
-                      meetingCode: roomId.substring(0, 6),
+                      roomCode: roomId.substring(0, 6),
                     ),
                   ),
                 );
