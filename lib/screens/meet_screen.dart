@@ -5,11 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:teams/constants/keys.dart';
 import 'package:teams/constants/variables.dart';
+import 'package:teams/utils/firebase_utils.dart';
+
+import 'home_screen.dart';
 
 class MeetScreen extends StatefulWidget {
   final String roomCode;
+  final String roomId;
 
-  const MeetScreen({Key? key, required this.roomCode}) : super(key: key);
+  const MeetScreen({Key? key, required this.roomCode, required this.roomId})
+      : super(key: key);
 
   @override
   State<MeetScreen> createState() => _MeetScreenState();
@@ -76,7 +81,12 @@ class _MeetScreenState extends State<MeetScreen> {
   }
 
   void _onCallEnd(BuildContext context) {
-    Navigator.of(context).pop();
+    exitMeeting();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+        result: true);
   }
 
   void _onToggleMute() {
@@ -101,7 +111,7 @@ class _MeetScreenState extends State<MeetScreen> {
             onPressed: _onToggleMute,
             child: Icon(
               _muted ? Icons.mic_off : Icons.mic,
-              color: _muted ? Colors.white : Colors.blueAccent,
+              color: _muted ? Colors.white : Colors.indigoAccent,
               size: 20.0,
             ),
             shape: const CircleBorder(),
@@ -125,7 +135,7 @@ class _MeetScreenState extends State<MeetScreen> {
             onPressed: _onSwitchCamera,
             child: const Icon(
               Icons.switch_camera,
-              color: Colors.blueAccent,
+              color: Colors.indigoAccent,
               size: 20.0,
             ),
             shape: const CircleBorder(),
@@ -138,87 +148,133 @@ class _MeetScreenState extends State<MeetScreen> {
     );
   }
 
+  void exitMeeting() async {
+    FirebaseUtils.roomCollection
+        .doc(widget.roomId)
+        .get()
+        .then((documentSnapshot) {
+      dynamic data = documentSnapshot.data();
+      List<String> users = data["users"].cast<String>();
+      if (users.length == 1) {
+        FirebaseUtils.roomCollection.doc(widget.roomId).delete();
+      } else {
+        users.remove(FirebaseUtils.auth.currentUser!.uid);
+        FirebaseUtils.roomCollection
+            .doc(widget.roomId)
+            .update({"users": users});
+      }
+    });
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Do you want to exit the meeting?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  _onCallEnd(context);
+                },
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.grey[800],
-      appBar: AppBar(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
         backgroundColor: Colors.grey[800],
-        centerTitle: true,
-        title: Text(
-          "RoomId: ${widget.roomCode}",
-          style: myStyle(20, Colors.white, FontWeight.w800),
+        appBar: AppBar(
+          backgroundColor: Colors.grey[800],
+          centerTitle: true,
+          title: Text(
+            "RoomId: ${widget.roomCode}",
+            style: myStyle(20, Colors.white, FontWeight.w800),
+          ),
+          elevation: 0,
         ),
-        elevation: 0,
-      ),
-      body: _loading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Stack(
-              children: [
-                Container(
-                  height: height,
-                  width: width,
-                  margin: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.black26,
-                    borderRadius: BorderRadius.circular(15),
-                    border: const Border(
-                      top: BorderSide(width: 4, color: Colors.indigoAccent),
-                      bottom: BorderSide(width: 4, color: Colors.indigoAccent),
-                      right: BorderSide(width: 4, color: Colors.indigoAccent),
-                      left: BorderSide(width: 4, color: Colors.indigoAccent),
+        body: _loading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Stack(
+                children: [
+                  Container(
+                    height: height,
+                    width: width,
+                    margin: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.circular(15),
+                      border: const Border(
+                        top: BorderSide(width: 4, color: Colors.indigoAccent),
+                        bottom:
+                            BorderSide(width: 4, color: Colors.indigoAccent),
+                        right: BorderSide(width: 4, color: Colors.indigoAccent),
+                        left: BorderSide(width: 4, color: Colors.indigoAccent),
+                      ),
+                    ),
+                    child: Center(
+                        child: _switch
+                            ? _renderLocalVideo()
+                            : _renderRemoteVideo()),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (_userJoined) {
+                              setState(() {
+                                _switch = !_switch;
+                              });
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 25),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: const Border(
+                                top: BorderSide(
+                                    width: 4, color: Colors.indigoAccent),
+                                bottom: BorderSide(
+                                    width: 4, color: Colors.indigoAccent),
+                                right: BorderSide(
+                                    width: 4, color: Colors.indigoAccent),
+                                left: BorderSide(
+                                    width: 4, color: Colors.indigoAccent),
+                              ),
+                            ),
+                            width: width / 3,
+                            height: height / 5,
+                            child: _switch
+                                ? _renderRemoteVideo()
+                                : _renderLocalVideo(),
+                          ),
+                        ),
+                        _toolbar(),
+                      ],
                     ),
                   ),
-                  child: Center(
-                      child:
-                          _switch ? _renderLocalVideo() : _renderRemoteVideo()),
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          if (_userJoined) {
-                            setState(() {
-                              _switch = !_switch;
-                            });
-                          }
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 25),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: const Border(
-                              top: BorderSide(
-                                  width: 4, color: Colors.indigoAccent),
-                              bottom: BorderSide(
-                                  width: 4, color: Colors.indigoAccent),
-                              right: BorderSide(
-                                  width: 4, color: Colors.indigoAccent),
-                              left: BorderSide(
-                                  width: 4, color: Colors.indigoAccent),
-                            ),
-                          ),
-                          width: width / 3,
-                          height: height / 5,
-                          child: _switch
-                              ? _renderRemoteVideo()
-                              : _renderLocalVideo(),
-                        ),
-                      ),
-                      _toolbar(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 

@@ -125,6 +125,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                           MaterialPageRoute(
                             builder: (context) => MeetScreen(
                               roomCode: roomCode,
+                              roomId: roomId,
                             ),
                           ),
                         );
