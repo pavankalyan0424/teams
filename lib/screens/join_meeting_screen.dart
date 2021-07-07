@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:teams/constants/variables.dart';
+import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 import 'meet_screen/meet_screen.dart';
@@ -28,7 +28,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
               ),
               Text(
                 "Room code",
-                style: myStyle(20),
+                style: customTextStyle(20),
               ),
               const SizedBox(
                 height: 20,
@@ -55,11 +55,11 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                 height: 10,
               ),
               TextField(
-                style: myStyle(20),
+                style: customTextStyle(20),
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: "Name (Leave if you want your username )",
-                  labelStyle: myStyle(15),
+                  labelStyle: customTextStyle(15),
                 ),
               ),
               const SizedBox(
@@ -72,7 +72,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                       children: [
                         Text(
                           "Loading....",
-                          style: myStyle(
+                          style: customTextStyle(
                             20,
                           ),
                         ),
@@ -93,7 +93,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                       SnackBar snackBar = SnackBar(
                         content: Text(
                           "The room code doesn't exist! Please check the code again",
-                          style: myStyle(
+                          style: customTextStyle(
                             20,
                           ),
                         ),
@@ -108,7 +108,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                         SnackBar snackBar = SnackBar(
                           content: Text(
                             "Meet limit exceeded",
-                            style: myStyle(
+                            style: customTextStyle(
                               20,
                             ),
                           ),
@@ -137,7 +137,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                   child: Center(
                     child: Text(
                       "Join Meeting",
-                      style: myStyle(20, Colors.white),
+                      style: customTextStyle(20, Colors.white),
                     ),
                   ),
                   width: double.maxFinite,

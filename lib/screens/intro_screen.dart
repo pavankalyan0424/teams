@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:teams/constants/variables.dart';
+import 'package:teams/constants/image_paths.dart';
+import 'package:teams/theme/custom_textstyle.dart';
 
 import 'auth_screen.dart';
 
@@ -37,7 +38,7 @@ class IntroScreen extends StatelessWidget {
       ),
       done: Text(
         "Done",
-        style: myStyle(
+        style: customTextStyle(
           20,
           Colors.black,
         ),
@@ -48,16 +49,16 @@ class IntroScreen extends StatelessWidget {
           body: "Welcome to Teams, the best video conference app",
           image: Center(
             child: Image.asset(
-              "assets/images/welcome.png",
+              ImagePaths.welcome,
               height: 175,
             ),
           ),
           decoration: PageDecoration(
-            bodyTextStyle: myStyle(
+            bodyTextStyle: customTextStyle(
               20,
               Colors.black,
             ),
-            titleTextStyle: myStyle(
+            titleTextStyle: customTextStyle(
               20,
               Colors.black,
             ),
@@ -68,16 +69,16 @@ class IntroScreen extends StatelessWidget {
           body: "Easy to use interface, join or start meetings in a fast time",
           image: Center(
             child: Image.asset(
-              "assets/images/conference.png",
+              ImagePaths.conference,
               height: 175,
             ),
           ),
           decoration: PageDecoration(
-            bodyTextStyle: myStyle(
+            bodyTextStyle: customTextStyle(
               20,
               Colors.black,
             ),
-            titleTextStyle: myStyle(
+            titleTextStyle: customTextStyle(
               20,
               Colors.black,
             ),
@@ -89,16 +90,16 @@ class IntroScreen extends StatelessWidget {
               "Your Security is important for us. Our servers are secure and reliable",
           image: Center(
             child: Image.asset(
-              "assets/images/secure.jpg",
+              ImagePaths.secure,
               height: 175,
             ),
           ),
           decoration: PageDecoration(
-            bodyTextStyle: myStyle(
+            bodyTextStyle: customTextStyle(
               20,
               Colors.black,
             ),
-            titleTextStyle: myStyle(
+            titleTextStyle: customTextStyle(
               20,
               Colors.black,
             ),

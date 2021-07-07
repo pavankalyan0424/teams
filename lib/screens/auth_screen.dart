@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:teams/constants/variables.dart';
+import 'package:teams/constants/image_paths.dart';
+import 'package:teams/constants/values.dart';
+import 'package:teams/screens/signin_button.dart';
+import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -36,7 +39,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       color: Colors.white,
                     ),
                     child: Image.asset(
-                      "assets/images/teams_icon.jpg",
+                      ImagePaths.teamsIcon,
                       height: 150,
                     ),
                   ),
@@ -45,14 +48,14 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   Text(
                     "Hi There!!!",
-                    style: myStyle(22, Colors.white, FontWeight.w800),
+                    style: customTextStyle(22, Colors.white, FontWeight.w800),
                   ),
                   const SizedBox(
                     height: 4,
                   ),
                   Text(
                     "Login to your account to continue",
-                    style: myStyle(17, Colors.white, FontWeight.w800),
+                    style: customTextStyle(17, Colors.white, FontWeight.w800),
                   ),
                 ],
               ),
@@ -83,16 +86,16 @@ class _AuthScreenState extends State<AuthScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SignInButton(
-                    imagePath: "assets/images/google_icon.png",
-                    label: "Sign in with Google",
+                    imagePath: ImagePaths.googleIcon,
+                    label: Values.signInWithGoogle,
                     signInFunction: FirebaseUtils.googleSignIn,
                   ),
                   const SizedBox(
                     height: 40,
                   ),
                   const SignInButton(
-                    imagePath: "assets/images/anonymous.jpg",
-                    label: "Sign in Anonymous",
+                    imagePath: ImagePaths.anonymous,
+                    label: Values.signInAnonymous,
                     signInFunction: FirebaseUtils.signInAnonymous,
                   ),
                 ],
@@ -100,98 +103,6 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class SignInButton extends StatelessWidget {
-  final Function signInFunction;
-  final String imagePath;
-  final String label;
-
-  const SignInButton(
-      {Key? key,
-      required this.signInFunction,
-      required this.label,
-      required this.imagePath})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        try {
-          SnackBar snackBar = SnackBar(
-            content: Row(
-              children: [
-                Text(
-                  "Loading....",
-                  style: myStyle(
-                    20,
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                const CircularProgressIndicator(),
-              ],
-            ),
-            duration: const Duration(seconds: 1),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          await signInFunction();
-          Navigator.pop(context);
-        } catch (e) {
-          SnackBar snackBar = SnackBar(
-            content: Text(
-              "Oops, Please Try Again",
-              style: myStyle(
-                20,
-              ),
-            ),
-            duration: const Duration(seconds: 2),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.all(20),
-        width: double.maxFinite,
-        height: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.black,
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                height: 30.0,
-                width: 30.0,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      imagePath,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                  shape: BoxShape.circle,
-                ),
-              ),
-              Text(
-                label,
-                style: myStyle(
-                  20.0,
-                  Colors.white,
-                  FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

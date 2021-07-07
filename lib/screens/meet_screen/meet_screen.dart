@@ -4,7 +4,7 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:teams/constants/keys.dart';
-import 'package:teams/constants/variables.dart';
+import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 import '../home_screen.dart';
@@ -80,13 +80,15 @@ class _MeetScreenState extends State<MeetScreen> {
     _engine.destroy();
   }
 
-  void _onCallEnd(BuildContext context) {
+  _onCallEnd(BuildContext context) {
     exitMeeting();
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
-        result: true);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(),
+      ),
+    );
+    return true;
   }
 
   void _onToggleMute() {
@@ -202,7 +204,7 @@ class _MeetScreenState extends State<MeetScreen> {
           centerTitle: true,
           title: Text(
             "RoomId: ${widget.roomCode}",
-            style: myStyle(20, Colors.white, FontWeight.w800),
+            style: customTextStyle(20, Colors.white, FontWeight.w800),
           ),
           elevation: 0,
           actions: [
@@ -296,7 +298,7 @@ class _MeetScreenState extends State<MeetScreen> {
     } else {
       return Text(
         'Please wait for other user to join',
-        style: myStyle(20, Colors.white, FontWeight.bold),
+        style: customTextStyle(20, Colors.white, FontWeight.bold),
         textAlign: TextAlign.center,
       );
     }

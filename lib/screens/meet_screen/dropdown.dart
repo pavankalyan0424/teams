@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:teams/constants/variables.dart';
+import 'package:teams/constants/values.dart';
+import 'package:teams/theme/custom_textstyle.dart';
 
 class DropDown extends StatefulWidget {
   final bool userJoined;
@@ -17,7 +18,7 @@ class DropDown extends StatefulWidget {
 }
 
 class _DropDownState extends State<DropDown> {
-  List<String> choices = <String>["Message", "Share"];
+  List<String> choices = <String>[Values.message, Values.share];
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +27,19 @@ class _DropDownState extends State<DropDown> {
       itemBuilder: (context) => [
         PopupMenuItem<String>(
           child: Text(
-            widget.userJoined ? "Message" : "Share",
-            style: myStyle(17, Colors.black),
+            widget.userJoined ? Values.message : Values.share,
+            style: customTextStyle(17, Colors.black),
           ),
-          value: widget.userJoined ? "Message" : "Share",
+          value: widget.userJoined ? Values.message : Values.share,
         )
       ],
     );
   }
 
   void choiceAction(String choice) {
-    if (choice == "Message") {
+    if (choice == Values.message) {
     } else {
-      Share.share(
-          "hey there, I am waiting for you; Here is the room Code: ${widget.roomCode}");
+      Share.share(Values.shareMessage + widget.roomCode);
     }
   }
 }
