@@ -82,12 +82,12 @@ class _MeetScreenState extends State<MeetScreen> {
 
   _onCallEnd(BuildContext context) {
     exitMeeting();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const HomeScreen(),
-      ),
-    );
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+        (route) => false);
     return true;
   }
 

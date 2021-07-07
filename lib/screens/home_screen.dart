@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teams/screens/boarding_screen.dart';
-import 'package:teams/screens/create_meeting_screen.dart';
+import 'package:teams/screens/create_meeting_screen/create_meeting_screen.dart';
 import 'package:teams/screens/join_meeting_screen.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
@@ -26,12 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
           TextButton(
             onPressed: () async {
               await FirebaseUtils.signOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const BoardingScreen(),
-                ),
-              );
             },
             child: Text(
               "Logout",
