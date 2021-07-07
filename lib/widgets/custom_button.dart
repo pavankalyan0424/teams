@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 
+import 'custom_snackbars.dart';
+
 class CustomButton extends StatelessWidget {
   final String label;
   final Function onTap;
@@ -15,23 +17,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        SnackBar snackBar = SnackBar(
-          content: Row(
-            children: [
-              Text(
-                "Loading....",
-                style: customTextStyle(
-                  20,
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              const CircularProgressIndicator(),
-            ],
-          ),
-          duration: const Duration(seconds: 2),
-        );
+        SnackBar snackBar = customSnackBarWithIndicator();
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         onTap();
       },

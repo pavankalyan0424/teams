@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:teams/constants/keys.dart';
 import 'package:teams/theme/custom_textstyle.dart';
+import 'package:teams/theme/meet_container_decoration.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 import '../home_screen.dart';
@@ -224,17 +225,7 @@ class _MeetScreenState extends State<MeetScreen> {
                     height: height,
                     width: width,
                     margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.black26,
-                      borderRadius: BorderRadius.circular(15),
-                      border: const Border(
-                        top: BorderSide(width: 4, color: Colors.indigoAccent),
-                        bottom:
-                            BorderSide(width: 4, color: Colors.indigoAccent),
-                        right: BorderSide(width: 4, color: Colors.indigoAccent),
-                        left: BorderSide(width: 4, color: Colors.indigoAccent),
-                      ),
-                    ),
+                    decoration: meetContainerDecoration(),
                     child: Center(
                         child: _switch
                             ? _renderLocalVideo()
@@ -256,19 +247,7 @@ class _MeetScreenState extends State<MeetScreen> {
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 25),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: const Border(
-                                top: BorderSide(
-                                    width: 4, color: Colors.indigoAccent),
-                                bottom: BorderSide(
-                                    width: 4, color: Colors.indigoAccent),
-                                right: BorderSide(
-                                    width: 4, color: Colors.indigoAccent),
-                                left: BorderSide(
-                                    width: 4, color: Colors.indigoAccent),
-                              ),
-                            ),
+                            decoration: meetContainerDecoration(),
                             width: width / 3,
                             height: height / 5,
                             child: _switch

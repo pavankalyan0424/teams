@@ -3,6 +3,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
 import 'package:teams/widgets/custom_button.dart';
+import 'package:teams/widgets/custom_snackbars.dart';
 
 import 'meet_screen/meet_screen.dart';
 
@@ -74,30 +75,16 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                       .get()
                       .then((snapShot) {
                     if (snapShot.docs.isEmpty) {
-                      SnackBar snackBar = SnackBar(
-                        content: Text(
-                          "The room code doesn't exist! Please check the code again",
-                          style: customTextStyle(
-                            20,
-                          ),
-                        ),
-                        duration: const Duration(seconds: 3),
-                      );
+                      SnackBar snackBar = customSnackBar(
+                          "The room code doesn't exist! Please check the code again");
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     } else {
                       dynamic data = snapShot.docs[0].data();
                       String roomId = snapShot.docs[0].id;
                       List<String> users = data["users"].cast<String>();
                       if (users.length != 1) {
-                        SnackBar snackBar = SnackBar(
-                          content: Text(
-                            "Meet limit exceeded",
-                            style: customTextStyle(
-                              20,
-                            ),
-                          ),
-                          duration: const Duration(seconds: 3),
-                        );
+                        SnackBar snackBar =
+                            customSnackBar("Meet limit exceeded");
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
                         users.add(FirebaseUtils.auth.currentUser!.uid);
