@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teams/constants/variables.dart';
+import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 import 'meet_screen/meet_screen.dart';
@@ -22,7 +22,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
           children: [
             Text(
               "Instructions...",
-              style: myStyle(
+              style: customTextStyle(
                 20,
                 Colors.black,
                 FontWeight.w800,
@@ -33,7 +33,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
             ),
             Text(
               "1. Create meeting by clicking on the button",
-              style: myStyle(
+              style: customTextStyle(
                 18,
                 Colors.black,
                 FontWeight.w800,
@@ -44,7 +44,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
             ),
             Text(
               "2. Click on share button to share with your friends",
-              style: myStyle(
+              style: customTextStyle(
                 18,
                 Colors.black,
                 FontWeight.w800,
@@ -60,7 +60,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                     children: [
                       Text(
                         "Loading....",
-                        style: myStyle(
+                        style: customTextStyle(
                           20,
                         ),
                       ),
@@ -95,7 +95,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                 child: Center(
                   child: Text(
                     "Create Meeting",
-                    style: myStyle(20, Colors.white),
+                    style: customTextStyle(20, Colors.white),
                   ),
                 ),
                 width: double.maxFinite,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:teams/constants/variables.dart';
 import 'package:teams/screens/boarding_screen.dart';
 import 'package:teams/screens/create_meeting_screen.dart';
 import 'package:teams/screens/join_meeting_screen.dart';
+import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Text(
               "Logout",
-              style: myStyle(17, Colors.black),
+              style: customTextStyle(17, Colors.black),
             ),
           ),
         ],
@@ -44,9 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.blue,
-        selectedLabelStyle: myStyle(17, Colors.blue),
+        selectedLabelStyle: customTextStyle(17, Colors.blue),
         unselectedItemColor: Colors.black,
-        unselectedLabelStyle: myStyle(17, Colors.black),
+        unselectedLabelStyle: customTextStyle(17, Colors.black),
         currentIndex: currentIndex,
         onTap: (value) => setState(() {
           currentIndex = value;
