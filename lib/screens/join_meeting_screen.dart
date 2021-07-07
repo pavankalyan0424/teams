@@ -3,7 +3,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:teams/constants/variables.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
-import 'meet_screen.dart';
+import 'meet_screen/meet_screen.dart';
 
 class JoinMeetingScreen extends StatefulWidget {
   const JoinMeetingScreen({Key? key}) : super(key: key);
@@ -82,7 +82,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                         const CircularProgressIndicator(),
                       ],
                     ),
-                    duration: const Duration(seconds: 3),
+                    duration: const Duration(seconds: 2),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   FirebaseUtils.roomCollection

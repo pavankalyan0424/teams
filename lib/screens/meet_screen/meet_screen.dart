@@ -7,7 +7,8 @@ import 'package:teams/constants/keys.dart';
 import 'package:teams/constants/variables.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
-import 'home_screen.dart';
+import '../home_screen.dart';
+import 'dropdown.dart';
 
 class MeetScreen extends StatefulWidget {
   final String roomCode;
@@ -22,8 +23,8 @@ class MeetScreen extends StatefulWidget {
 
 class _MeetScreenState extends State<MeetScreen> {
   int _remoteUid = 0;
-  bool _userJoined = false;
   late RtcEngine _engine;
+  bool _userJoined = false;
   bool _muted = false;
   bool _loading = true;
   bool _switch = false;
@@ -38,7 +39,6 @@ class _MeetScreenState extends State<MeetScreen> {
     await [Permission.microphone, Permission.camera].request();
     _engine = await RtcEngine.create(APP_ID);
     await _engine.enableVideo();
-    // await _engine.enableLocalVideo(true);
     _engine.setEventHandler(
       RtcEngineEventHandler(
         joinChannelSuccess: (channel, uid, elapsed) {
@@ -205,6 +205,12 @@ class _MeetScreenState extends State<MeetScreen> {
             style: myStyle(20, Colors.white, FontWeight.w800),
           ),
           elevation: 0,
+          actions: [
+            DropDown(
+              userJoined: _userJoined,
+              roomCode: widget.roomCode,
+            ),
+          ],
         ),
         body: _loading
             ? const Center(

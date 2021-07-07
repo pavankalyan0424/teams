@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teams/constants/variables.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
-import 'meet_screen.dart';
+import 'meet_screen/meet_screen.dart';
 
 class CreateMeetingScreen extends StatefulWidget {
   const CreateMeetingScreen({Key? key}) : super(key: key);
@@ -55,6 +55,24 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
             ),
             InkWell(
               onTap: () async {
+                SnackBar snackBar = SnackBar(
+                  content: Row(
+                    children: [
+                      Text(
+                        "Loading....",
+                        style: myStyle(
+                          20,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      const CircularProgressIndicator(),
+                    ],
+                  ),
+                  duration: const Duration(seconds: 2),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 String roomId = FirebaseUtils.roomCollection.doc().id;
                 await FirebaseUtils.roomCollection.doc(roomId).set({
                   "roomCode": roomId.substring(0, 6),
