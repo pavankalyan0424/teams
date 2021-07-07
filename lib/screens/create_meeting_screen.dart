@@ -74,19 +74,22 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 String roomId = FirebaseUtils.roomCollection.doc().id;
-                await FirebaseUtils.roomCollection.doc(roomId).set({
+                FirebaseUtils.roomCollection.doc(roomId).set({
                   "roomCode": roomId.substring(0, 6),
                   "users": [FirebaseUtils.auth.currentUser!.uid]
-                });
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MeetScreen(
-                      roomCode: roomId.substring(0, 6),
-                      roomId: roomId,
+                }).then((value) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MeetScreen(
+                        roomCode: roomId.substring(0, 6),
+                        roomId: roomId,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }, onError: (error) {
+                  print(error);
+                });
               },
               child: Container(
                 child: Center(
