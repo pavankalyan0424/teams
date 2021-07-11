@@ -211,7 +211,7 @@ class _MeetScreenState extends State<MeetScreen> {
           actions: [
             DropDown(
               userJoined: _userJoined,
-              roomCode: widget.roomCode,
+              roomId: widget.roomId,
             ),
           ],
         ),
