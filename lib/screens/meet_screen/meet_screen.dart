@@ -57,6 +57,7 @@ class _MeetScreenState extends State<MeetScreen> {
           setState(() {
             _remoteUid = 0;
             _userJoined = false;
+            _switch = false;
           });
         },
       ),

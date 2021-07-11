@@ -4,12 +4,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseUtils {
+  static FirebaseAuth auth = FirebaseAuth.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+
   static CollectionReference userCollection =
       FirebaseFirestore.instance.collection("users");
-  static final GoogleSignIn _googleSignIn = GoogleSignIn();
   static CollectionReference roomCollection =
       FirebaseFirestore.instance.collection("rooms");
-  static FirebaseAuth auth = FirebaseAuth.instance;
+  static CollectionReference messageCollection =
+  FirebaseFirestore.instance.collection("messages");
 
   static Future<void> initialize() async {
     await Firebase.initializeApp();

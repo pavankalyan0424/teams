@@ -53,12 +53,16 @@ class _DropDownState extends State<DropDown> {
             .toString();
       });
       print(remoteUid);
+      //conId is conversationUid
+      String conId = localUid.hashCode <= remoteUid.hashCode
+          ? localUid + '_' + remoteUid
+          : remoteUid + '_' + localUid;
       Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ChatScreen(
               localUid: localUid,
-              remoteUid: remoteUid,
+              conUid: conId,
             ),
           ));
     } else {

@@ -6,11 +6,11 @@ import 'package:teams/widgets/custom_triangle.dart';
 
 class ReceivedMessage extends StatelessWidget {
   final String message;
+  final int timestamp;
 
-  const ReceivedMessage({
-    Key? key,
-    required this.message,
-  }) : super(key: key);
+  const ReceivedMessage(
+      {Key? key, required this.message, required this.timestamp})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +45,20 @@ class ReceivedMessage extends StatelessWidget {
                         bottomRight: Radius.circular(18),
                       ),
                     ),
-                    child: Text(
-                      message,
-                      style: customTextStyle(14, Colors.black),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          message,
+                          style: customTextStyle(14, Colors.black),
+                        ),
+                        Text(
+                          DateTime.fromMillisecondsSinceEpoch(timestamp)
+                              .toString(),
+                          style: customTextStyle(10, Colors.black),
+                        ),
+                      ],
                     ),
                   ),
                 ),

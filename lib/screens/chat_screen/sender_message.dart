@@ -4,10 +4,12 @@ import 'package:teams/widgets/custom_triangle.dart';
 
 class SentMessage extends StatelessWidget {
   final String message;
+  final int timestamp;
 
   const SentMessage({
     Key? key,
     required this.message,
+    required this.timestamp
   }) : super(key: key);
 
   @override
@@ -34,9 +36,20 @@ class SentMessage extends StatelessWidget {
                         bottomRight: Radius.circular(18),
                       ),
                     ),
-                    child: Text(
-                      message,
-                      style: customTextStyle(14, Colors.white),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          message,
+                          style: customTextStyle(14, Colors.white),
+                        ),
+                        Text(
+                          DateTime.fromMillisecondsSinceEpoch(timestamp)
+                              .toString(),
+                          style: customTextStyle(10, Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ),
