@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:teams/constants/keys.dart';
 import 'package:teams/theme/custom_textstyle.dart';
-import 'package:teams/theme/meet_container_decoration.dart';
 import 'package:teams/utils/firebase_utils.dart';
-import 'package:teams/widgets/custom_time.dart';
 
-import '../home_screen/home_screen.dart';
+import '../home_screen.dart';
 import 'dropdown.dart';
 
 class MeetScreen extends StatefulWidget {
@@ -58,7 +56,6 @@ class _MeetScreenState extends State<MeetScreen> {
           setState(() {
             _remoteUid = 0;
             _userJoined = false;
-            _switch = false;
           });
         },
       ),
@@ -85,12 +82,12 @@ class _MeetScreenState extends State<MeetScreen> {
 
   _onCallEnd(BuildContext context) {
     exitMeeting();
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
-        (route) => false);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(),
+      ),
+    );
     return true;
   }
 
@@ -205,21 +202,15 @@ class _MeetScreenState extends State<MeetScreen> {
         appBar: AppBar(
           backgroundColor: Colors.grey[800],
           centerTitle: true,
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CustomTime(),
-              Text(
-                " |  ${widget.roomCode}",
-                style: customTextStyle(20, Colors.white, FontWeight.w800),
-              ),
-            ],
+          title: Text(
+            "RoomId: ${widget.roomCode}",
+            style: customTextStyle(20, Colors.white, FontWeight.w800),
           ),
           elevation: 0,
           actions: [
             DropDown(
               userJoined: _userJoined,
-              roomId: widget.roomId,
+              roomCode: widget.roomCode,
             ),
           ],
         ),
@@ -233,7 +224,17 @@ class _MeetScreenState extends State<MeetScreen> {
                     height: height,
                     width: width,
                     margin: const EdgeInsets.all(10),
-                    decoration: meetContainerDecoration(),
+                    decoration: BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.circular(15),
+                      border: const Border(
+                        top: BorderSide(width: 4, color: Colors.indigoAccent),
+                        bottom:
+                            BorderSide(width: 4, color: Colors.indigoAccent),
+                        right: BorderSide(width: 4, color: Colors.indigoAccent),
+                        left: BorderSide(width: 4, color: Colors.indigoAccent),
+                      ),
+                    ),
                     child: Center(
                         child: _switch
                             ? _renderLocalVideo()
@@ -255,7 +256,19 @@ class _MeetScreenState extends State<MeetScreen> {
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 25),
-                            decoration: meetContainerDecoration(),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: const Border(
+                                top: BorderSide(
+                                    width: 4, color: Colors.indigoAccent),
+                                bottom: BorderSide(
+                                    width: 4, color: Colors.indigoAccent),
+                                right: BorderSide(
+                                    width: 4, color: Colors.indigoAccent),
+                                left: BorderSide(
+                                    width: 4, color: Colors.indigoAccent),
+                              ),
+                            ),
                             width: width / 3,
                             height: height / 5,
                             child: _switch
