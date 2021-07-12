@@ -53,26 +53,11 @@ class _DropDownState extends State<DropDown> {
             .toString();
       });
 
-      //conId is conversationId
-      String conId = localUid.hashCode <= remoteUid.hashCode
-          ? localUid + '_' + remoteUid
-          : remoteUid + '_' + localUid;
-
-      FirebaseUtils.messageCollection.doc(conId).get().then((documentSnapShot) {
-        if (documentSnapShot.exists) {
-          print(documentSnapShot.data());
-        } else {
-          FirebaseUtils.messageCollection.doc(conId).set({
-            "users": [localUid, remoteUid]
-          });
-        }
-      });
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ChatScreen(
             localUid: localUid,
-            conId: conId,
             remoteUid: remoteUid,
           ),
         ),

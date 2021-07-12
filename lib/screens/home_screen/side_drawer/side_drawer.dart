@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:teams/screens/home_screen/chats_screen.dart';
+import 'package:teams/screens/home_screen/profile_screen/profile_screen.dart';
 import 'package:teams/screens/home_screen/side_drawer/tile.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
-import '../profile_screen/profile_screen.dart';
 import 'head.dart';
 
 class SideDrawer extends StatelessWidget {
@@ -30,7 +31,14 @@ class SideDrawer extends StatelessWidget {
           ),
           Tile(
             title: 'Messages',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ChatsScreen(),
+                ),
+              );
+            },
           ),
           Tile(
             title: 'Logout',
