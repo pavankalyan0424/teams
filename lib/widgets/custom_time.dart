@@ -13,12 +13,14 @@ class CustomTime extends StatefulWidget {
 
 class _CustomTimeState extends State<CustomTime> {
   late String _timeString;
+  late Timer _timer;
 
   @override
   void initState() {
-    _timeString = IntlUtils.getTime(DateTime.now());
-    Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
     super.initState();
+    _timeString = IntlUtils.getTime(DateTime.now());
+    _timer =
+        Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
   }
 
   void _getTime() {
@@ -27,6 +29,12 @@ class _CustomTimeState extends State<CustomTime> {
     setState(() {
       _timeString = formattedDateTime;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
   }
 
   @override
