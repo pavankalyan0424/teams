@@ -57,10 +57,12 @@ class _DropDownState extends State<DropDown> {
       String conId = localUid.hashCode <= remoteUid.hashCode
           ? localUid + '_' + remoteUid
           : remoteUid + '_' + localUid;
+
       FirebaseUtils.messageCollection.doc(conId).get().then((documentSnapShot) {
-        dynamic data = documentSnapShot.data();
-        if (data["users"] == null) {
-          FirebaseUtils.messageCollection.doc(conId).update({
+        if (documentSnapShot.exists) {
+          print(documentSnapShot.data());
+        } else {
+          FirebaseUtils.messageCollection.doc(conId).set({
             "users": [localUid, remoteUid]
           });
         }

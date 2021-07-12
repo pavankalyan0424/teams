@@ -5,7 +5,7 @@ class IntlUtils {
   static String formatDateTime(int millisecondsSinceEpoch) {
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
-    return DateFormat('MMMM d hh:mm a').format(dateTime);
+    return DateFormat('MM/d hh:mm a').format(dateTime);
   }
 
   static String getTime(DateTime dateTime) {

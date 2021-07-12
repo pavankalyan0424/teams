@@ -12,20 +12,21 @@ class InputField extends StatelessWidget {
     required this.conId,
   }) : super(key: key);
 
-  void sendMessage() {
-    String message = localTextController.text;
-    if (message.isNotEmpty) {
-      FirebaseUtils.messageCollection.doc(conId).collection(conId).doc().set({
-        "message": message,
-        "timestamp": DateTime.now().millisecondsSinceEpoch,
-        "sentBy": localUid
-      });
-    }
-    localTextController.text = "";
-  }
-
   @override
   Widget build(BuildContext context) {
+    void sendMessage() {
+      String message = localTextController.text;
+      if (message.isNotEmpty) {
+        FirebaseUtils.messageCollection.doc(conId).collection(conId).doc().set({
+          "message": message,
+          "timestamp": DateTime.now().millisecondsSinceEpoch,
+          "sentBy": localUid
+        });
+      }
+      localTextController.text = "";
+      FocusScope.of(context).unfocus();
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 10),
       child: Row(
