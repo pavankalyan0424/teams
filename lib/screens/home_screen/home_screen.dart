@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:teams/screens/create_meeting_screen/create_meeting_screen.dart';
+import 'package:teams/screens/home_screen/side_drawer.dart';
 import 'package:teams/screens/join_meeting_screen.dart';
 import 'package:teams/theme/custom_textstyle.dart';
-import 'package:teams/utils/firebase_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -18,21 +18,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const SideDrawer(),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        actions: [
-          TextButton(
-            onPressed: () async {
-              await FirebaseUtils.signOut();
-            },
-            child: Text(
-              "Logout",
-              style: customTextStyle(17, Colors.black),
-            ),
-          ),
-        ],
       ),
+      backgroundColor: Colors.white,
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,

@@ -24,19 +24,13 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-         "Chat",
-         style: customTextStyle(
-            17,Colors.indigoAccent,
-         ),
-            ),
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
+          "Chat",
+          style: customTextStyle(
+            17,
+            Colors.indigoAccent,
+          ),
         ),
       ),
       body: Column(

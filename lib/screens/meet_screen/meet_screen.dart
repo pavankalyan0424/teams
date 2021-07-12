@@ -9,7 +9,7 @@ import 'package:teams/theme/meet_container_decoration.dart';
 import 'package:teams/utils/firebase_utils.dart';
 import 'package:teams/widgets/custom_time.dart';
 
-import '../home_screen.dart';
+import '../home_screen/home_screen.dart';
 import 'dropdown.dart';
 
 class MeetScreen extends StatefulWidget {

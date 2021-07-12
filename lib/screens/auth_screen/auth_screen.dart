@@ -18,7 +18,6 @@ class _AuthScreenState extends State<AuthScreen> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.grey[250],
       body: Stack(
         children: [
           Container(
