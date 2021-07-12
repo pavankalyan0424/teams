@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teams/screens/home_screen/chats_screen.dart';
+import 'package:teams/screens/chats_screen/chats_screen.dart';
 import 'package:teams/screens/home_screen/profile_screen/profile_screen.dart';
 import 'package:teams/screens/home_screen/side_drawer/tile.dart';
 import 'package:teams/utils/firebase_utils.dart';
