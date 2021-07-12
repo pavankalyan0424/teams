@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teams/screens/create_meeting_screen/create_meeting_screen.dart';
-import 'package:teams/screens/home_screen/side_drawer.dart';
+import 'package:teams/screens/home_screen/side_drawer/side_drawer.dart';
 import 'package:teams/screens/join_meeting_screen.dart';
-import 'package:teams/theme/custom_textstyle.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,28 +11,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int currentIndex = 0;
-  final List pages = [const JoinMeetingScreen(), const CreateMeetingScreen()];
+  int _currentIndex = 0;
+  final List _pages = [const JoinMeetingScreen(), const CreateMeetingScreen()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const SideDrawer(),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
-      body: pages[currentIndex],
+      appBar: AppBar(),
+      body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.blue,
-        selectedLabelStyle: customTextStyle(17, Colors.blue),
-        unselectedItemColor: Colors.black,
-        unselectedLabelStyle: customTextStyle(17, Colors.black),
-        currentIndex: currentIndex,
+        currentIndex: _currentIndex,
         onTap: (value) => setState(() {
-          currentIndex = value;
+          _currentIndex = value;
         }),
         items: [
           const BottomNavigationBarItem(

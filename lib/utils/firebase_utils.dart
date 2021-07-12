@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,10 +48,12 @@ class FirebaseUtils {
   }
 
   static Future<void> storeUserDetails(User user) async {
+    //To generate random number for avoiding common names during guest login
+    Random random = Random();
     userCollection.doc(user.uid).get().then((documentSnapshot) {
       if (!documentSnapshot.exists) {
         userCollection.doc(user.uid).set({
-          "username": user.displayName ?? "Guest",
+          "username": user.displayName ?? "Guest${random.nextInt(900) + 100}",
           "uid": user.uid,
           "email": user.email ?? "guest@guest.com",
           "photoURL": user.photoURL ??
