@@ -2,6 +2,7 @@ import 'dart:math' as math; // import this
 
 import 'package:flutter/material.dart';
 import 'package:teams/theme/custom_textstyle.dart';
+import 'package:teams/utils/intl_utils.dart';
 import 'package:teams/widgets/custom_triangle.dart';
 
 class ReceivedMessage extends StatelessWidget {
@@ -53,9 +54,11 @@ class ReceivedMessage extends StatelessWidget {
                           message,
                           style: customTextStyle(14, Colors.black),
                         ),
+                        const SizedBox(
+                          height: 5,
+                        ),
                         Text(
-                          DateTime.fromMillisecondsSinceEpoch(timestamp)
-                              .toString(),
+                          IntlUtils.formatDateTime(timestamp),
                           style: customTextStyle(10, Colors.black),
                         ),
                       ],

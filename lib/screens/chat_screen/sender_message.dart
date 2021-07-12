@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:teams/theme/custom_textstyle.dart';
+import 'package:teams/utils/intl_utils.dart';
 import 'package:teams/widgets/custom_triangle.dart';
 
 class SentMessage extends StatelessWidget {
   final String message;
   final int timestamp;
 
-  const SentMessage({
-    Key? key,
-    required this.message,
-    required this.timestamp
-  }) : super(key: key);
+  const SentMessage({Key? key, required this.message, required this.timestamp})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +42,11 @@ class SentMessage extends StatelessWidget {
                           message,
                           style: customTextStyle(14, Colors.white),
                         ),
+                        const SizedBox(
+                          height: 5,
+                        ),
                         Text(
-                          DateTime.fromMillisecondsSinceEpoch(timestamp)
-                              .toString(),
+                          IntlUtils.formatDateTime(timestamp),
                           style: customTextStyle(10, Colors.white),
                         ),
                       ],

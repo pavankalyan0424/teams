@@ -7,6 +7,7 @@ import 'package:teams/constants/keys.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/theme/meet_container_decoration.dart';
 import 'package:teams/utils/firebase_utils.dart';
+import 'package:teams/widgets/custom_time.dart';
 
 import '../home_screen.dart';
 import 'dropdown.dart';
@@ -204,9 +205,15 @@ class _MeetScreenState extends State<MeetScreen> {
         appBar: AppBar(
           backgroundColor: Colors.grey[800],
           centerTitle: true,
-          title: Text(
-            "RoomId: ${widget.roomCode}",
-            style: customTextStyle(20, Colors.white, FontWeight.w800),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CustomTime(),
+              Text(
+                " |  ${widget.roomCode}",
+                style: customTextStyle(20, Colors.white, FontWeight.w800),
+              ),
+            ],
           ),
           elevation: 0,
           actions: [

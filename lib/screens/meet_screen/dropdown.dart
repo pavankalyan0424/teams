@@ -52,19 +52,29 @@ class _DropDownState extends State<DropDown> {
             .singleWhere((e) => e.toString() != localUid)
             .toString();
       });
-      print(remoteUid);
-      //conId is conversationUid
+
+      //conId is conversationId
       String conId = localUid.hashCode <= remoteUid.hashCode
           ? localUid + '_' + remoteUid
           : remoteUid + '_' + localUid;
+      FirebaseUtils.messageCollection.doc(conId).get().then((documentSnapShot) {
+        dynamic data = documentSnapShot.data();
+        if (data["users"] == null) {
+          FirebaseUtils.messageCollection.doc(conId).update({
+            "users": [localUid, remoteUid]
+          });
+        }
+      });
       Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatScreen(
-              localUid: localUid,
-              conUid: conId,
-            ),
-          ));
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatScreen(
+            localUid: localUid,
+            conId: conId,
+            remoteUid: remoteUid,
+          ),
+        ),
+      );
     } else {
       Share.share(Values.shareMessage + widget.roomId.substring(0, 6));
     }
