@@ -3,7 +3,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:teams/constants/image_paths.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 
-import 'auth_screen.dart';
+import 'auth_screen/auth_screen.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({Key? key}) : super(key: key);

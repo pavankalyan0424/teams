@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:teams/screens/home_screen.dart';
+import 'package:teams/screens/home_screen/home_screen.dart';
+import 'package:teams/screens/intro_screen.dart';
 import 'package:teams/utils/firebase_utils.dart';
-
-import 'intro_screen.dart';
 
 class BoardingScreen extends StatefulWidget {
   const BoardingScreen({Key? key}) : super(key: key);

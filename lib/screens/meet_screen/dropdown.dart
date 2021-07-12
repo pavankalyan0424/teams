@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:teams/constants/values.dart';
 import 'package:teams/theme/custom_textstyle.dart';
+import 'package:teams/utils/firebase_utils.dart';
+
+import '../chat_screen/chat_screen.dart';
 
 class DropDown extends StatefulWidget {
   final bool userJoined;
-  final String roomCode;
+  final String roomId;
 
   const DropDown({
     Key? key,
     required this.userJoined,
-    required this.roomCode,
+    required this.roomId,
   }) : super(key: key);
 
   @override
@@ -36,10 +39,46 @@ class _DropDownState extends State<DropDown> {
     );
   }
 
-  void choiceAction(String choice) {
+  Future<void> choiceAction(String choice) async {
+    String localUid = FirebaseUtils.auth.currentUser!.uid;
+    late String remoteUid;
     if (choice == Values.message) {
+      await FirebaseUtils.roomCollection
+          .doc(widget.roomId)
+          .get()
+          .then((documentSnapShot) {
+        dynamic data = documentSnapShot.data();
+        remoteUid = data["users"]
+            .singleWhere((e) => e.toString() != localUid)
+            .toString();
+      });
+
+      //conId is conversationId
+      String conId = localUid.hashCode <= remoteUid.hashCode
+          ? localUid + '_' + remoteUid
+          : remoteUid + '_' + localUid;
+
+      FirebaseUtils.messageCollection.doc(conId).get().then((documentSnapShot) {
+        if (documentSnapShot.exists) {
+          print(documentSnapShot.data());
+        } else {
+          FirebaseUtils.messageCollection.doc(conId).set({
+            "users": [localUid, remoteUid]
+          });
+        }
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatScreen(
+            localUid: localUid,
+            conId: conId,
+            remoteUid: remoteUid,
+          ),
+        ),
+      );
     } else {
-      Share.share(Values.shareMessage + widget.roomCode);
+      Share.share(Values.shareMessage + widget.roomId.substring(0, 6));
     }
   }
 }
