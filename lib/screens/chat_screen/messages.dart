@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/screens/chat_screen/reciever_message.dart';
 import 'package:teams/screens/chat_screen/sender_message.dart';
+import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 class Messages extends StatelessWidget {
@@ -21,12 +23,17 @@ class Messages extends StatelessWidget {
         stream: FirebaseUtils.messageCollection
             .doc(conUid)
             .collection(conUid)
-            .orderBy("timestamp", descending: true)
+            .orderBy(StringConstants.timestamp, descending: true)
             .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasError) {
-            return const Center(child: Text('Something went wrong'));
+            return Center(
+              child: Text(
+                'Something went wrong',
+                style: customTextStyle(18, Colors.indigoAccent),
+              ),
+            );
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -39,14 +46,14 @@ class Messages extends StatelessWidget {
             itemCount: totalMessages.length,
             itemBuilder: (context, index) {
               dynamic data = totalMessages[index].data();
-              return data["sentBy"] == localUid
+              return data[StringConstants.sentBy] == localUid
                   ? SentMessage(
-                      message: data["message"],
-                      timestamp: data["timestamp"],
+                      message: data[StringConstants.message],
+                      timestamp: data[StringConstants.timestamp],
                     )
                   : ReceivedMessage(
-                      message: data["message"],
-                      timestamp: data["timestamp"],
+                      message: data[StringConstants.message],
+                      timestamp: data[StringConstants.timestamp],
                     );
             },
           );

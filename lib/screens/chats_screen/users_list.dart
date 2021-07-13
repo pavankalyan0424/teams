@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/screens/chat_screen/chat_screen.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 
@@ -39,7 +40,7 @@ class UsersList extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => ChatScreen(
                               localUid: localUid,
-                              remoteUid: _users[index]["uid"],
+                              remoteUid: _users[index][StringConstants.uid],
                               fromMeetScreen: false,
                               // remoteUserDetails: _users[index],
                             ),
@@ -48,11 +49,11 @@ class UsersList extends StatelessWidget {
                         leading: CircleAvatar(
                           radius: 40,
                           backgroundImage: NetworkImage(
-                            _users[index]["photoURL"],
+                            _users[index][StringConstants.photoURL],
                           ),
                         ),
                         title: Text(
-                          _users[index]["username"],
+                          _users[index][StringConstants.username],
                           style: customTextStyle(20, Colors.black),
                         ),
                       ),

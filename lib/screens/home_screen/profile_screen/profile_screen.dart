@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/screens/home_screen/profile_screen/update_username.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/theme/gradients.dart';
@@ -133,8 +134,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   getUserData() async {
     Map<String, dynamic> data = await FirebaseUtils.getUserDetails();
     setState(() {
-      userName = data["username"];
-      photoURL = data["photoURL"];
+      userName = data[StringConstants.username];
+      photoURL = data[StringConstants.photoURL];
       loaded = true;
     });
   }

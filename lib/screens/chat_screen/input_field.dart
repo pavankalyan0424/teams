@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 class InputField extends StatelessWidget {
@@ -18,9 +19,9 @@ class InputField extends StatelessWidget {
       String message = localTextController.text;
       if (message.isNotEmpty) {
         FirebaseUtils.messageCollection.doc(conId).collection(conId).doc().set({
-          "message": message,
-          "timestamp": DateTime.now().millisecondsSinceEpoch,
-          "sentBy": localUid
+          StringConstants.message: message,
+          StringConstants.timestamp: DateTime.now().millisecondsSinceEpoch,
+          StringConstants.sentBy: localUid
         });
       }
       localTextController.text = "";

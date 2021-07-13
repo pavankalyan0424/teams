@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/theme/custom_textstyle.dart';
+import 'package:teams/utils/con_id_generator.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 import 'input_field.dart';
@@ -29,9 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    conId = widget.localUid.hashCode <= widget.remoteUid.hashCode
-        ? widget.localUid + '_' + widget.remoteUid
-        : widget.remoteUid + '_' + widget.localUid;
+    conId = generateConId(widget.localUid, widget.remoteUid);
     checkIfUpdated();
   }
 
@@ -39,7 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
     FirebaseUtils.messageCollection.doc(conId).get().then((documentSnapShot) {
       if (!documentSnapShot.exists) {
         FirebaseUtils.messageCollection.doc(conId).set({
-          "users": [widget.localUid, widget.remoteUid]
+          StringConstants.users: [widget.localUid, widget.remoteUid]
         });
       }
     });

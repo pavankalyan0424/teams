@@ -6,7 +6,6 @@ import 'package:teams/widgets/custom_button.dart';
 
 import 'instructions.dart';
 
-
 class CreateMeetingScreen extends StatefulWidget {
   const CreateMeetingScreen({Key? key}) : super(key: key);
 
@@ -31,18 +30,21 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                 FirebaseUtils.roomCollection.doc(roomId).set({
                   StringConstants.roomCode: roomId.substring(0, 6),
                   StringConstants.users: [FirebaseUtils.userId()]
-                }).then((value) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MeetScreen(
-                        roomId: roomId,
+                }).then(
+                  (value) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MeetScreen(
+                          roomId: roomId,
+                        ),
                       ),
-                    ),
-                  );
-                }, onError: (error) {
-                  print(error);
-                });
+                    );
+                  },
+                  onError: (error) {
+                    print(error);
+                  },
+                );
               },
             ),
           ],

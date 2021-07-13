@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
@@ -30,17 +31,20 @@ class _RemoteUserTileState extends State<RemoteUserTile> {
           leading: CircleAvatar(
             radius: 40,
             backgroundImage: NetworkImage(
-              userDocument!["photoURL"],
+              userDocument![StringConstants.photoURL],
             ),
           ),
           title: Text(
-            userDocument["username"],
+            userDocument[StringConstants.username],
             style: customTextStyle(14, Colors.indigo),
           ),
           subtitle: Text(
-            userDocument["online"] ? "online" : "Offline",
+            userDocument[StringConstants.online] ? "online" : "Offline",
             style: customTextStyle(
-                10, userDocument["online"] ? Colors.green : Colors.red),
+                10,
+                userDocument[StringConstants.online]
+                    ? Colors.green
+                    : Colors.red),
           ),
         );
       },
