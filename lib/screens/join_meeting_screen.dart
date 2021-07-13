@@ -30,7 +30,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
             clipper: CustomOvalBottom(),
             child: Container(
               width: width,
-              height: height / 4,
+              height: height / 3,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: Gradients.indigo,
@@ -58,12 +58,12 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: height / 5,
                   ),
                   Text(
                     "Room code",
-                    style: customTextStyle(20,Colors.indigoAccent),
+                    style: customTextStyle(20, Colors.indigoAccent),
                   ),
                   const SizedBox(
                     height: 20,
@@ -100,7 +100,8 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                           if (snapShot.docs.isEmpty) {
                             SnackBar snackBar =
                                 customSnackBar(StringConstants.roomCodeError);
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           } else {
                             dynamic data = snapShot.docs[0].data();
                             String roomId = snapShot.docs[0].id;

@@ -16,10 +16,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       drawer: const SideDrawer(),
-      appBar: AppBar(),
-      body: _pages[_currentIndex],
+      body: Stack(
+        children: [
+          _pages[_currentIndex],
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              margin: EdgeInsets.only(top: height*0.07, left: 20),
+              child: Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(
+                    Icons.view_headline,
+                    color: _currentIndex == 0 ? Colors.white : Colors.indigo,
+                    size: 40,
+                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (value) => setState(() {
