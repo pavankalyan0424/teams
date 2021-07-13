@@ -13,4 +13,18 @@ class Gradients {
     Color(0xFF385998),
     Colors.white,
   ];
+
+  static const List<Color> redYellow = [
+    Color(0xffee0000),
+    Color(0xffeeee00),
+  ];
+
+  static const List<Color> blue = [
+    Color(0xFF0000FF),
+    Color(0xFF1F1FFF),
+    Color(0xFF4949FF),
+    Color(0xFF7879FF),
+    Color(0xFFA3A3FF),
+    Color(0xFFBFBFFF),
+  ];
 }
