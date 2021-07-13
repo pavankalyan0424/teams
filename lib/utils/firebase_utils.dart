@@ -1,15 +1,22 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:teams/constants/image_paths.dart';
+import 'package:teams/constants/string_constants.dart';
 
 class FirebaseUtils {
-  static CollectionReference userCollection =
-      FirebaseFirestore.instance.collection("users");
-  static final GoogleSignIn _googleSignIn = GoogleSignIn();
-  static CollectionReference roomCollection =
-      FirebaseFirestore.instance.collection("rooms");
   static FirebaseAuth auth = FirebaseAuth.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  static CollectionReference userCollection =
+      FirebaseFirestore.instance.collection(StringConstants.users);
+  static CollectionReference roomCollection =
+      FirebaseFirestore.instance.collection(StringConstants.rooms);
+  static CollectionReference messageCollection =
+      FirebaseFirestore.instance.collection(StringConstants.messages);
 
   static Future<void> initialize() async {
     await Firebase.initializeApp();
@@ -42,17 +49,38 @@ class FirebaseUtils {
     return user;
   }
 
+  static String userId() {
+    return auth.currentUser!.uid;
+  }
+
   static Future<void> storeUserDetails(User user) async {
+    //To generate random number for avoiding common names during guest login
+    Random random = Random();
     userCollection.doc(user.uid).get().then((documentSnapshot) {
       if (!documentSnapshot.exists) {
         userCollection.doc(user.uid).set({
-          "username": user.displayName ?? "Guest",
-          "uid": user.uid,
-          "email": user.email ?? "guest@guest.com",
-          "photoURL": user.photoURL ??
-              "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
+          StringConstants.username:
+              user.displayName ?? "Guest${random.nextInt(900) + 100}",
+          StringConstants.uid: user.uid,
+          StringConstants.email: user.email ?? "guest@guest.com",
+          StringConstants.photoURL:
+              user.photoURL ?? ImagePaths.anonymousFromNet,
+          StringConstants.online: true,
+        });
+      } else {
+        userCollection.doc(user.uid).update({
+          StringConstants.online: true,
         });
       }
     });
+  }
+
+  static Future<Map<String, dynamic>> getUserDetails() async {
+    Map<String, dynamic> data = {};
+    await userCollection.doc(userId()).get().then((documentSnapshot) {
+      dynamic _data = documentSnapshot.data();
+      data = _data.cast<String, dynamic>();
+    });
+    return data;
   }
 }

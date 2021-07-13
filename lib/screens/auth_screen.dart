@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:teams/constants/image_paths.dart';
-import 'package:teams/constants/values.dart';
-import 'package:teams/screens/signin_button.dart';
+import 'package:teams/constants/string_constants.dart';
+import 'package:teams/screens/auth_screen/signin_button.dart';
 import 'package:teams/theme/custom_textstyle.dart';
+import 'package:teams/theme/gradients.dart';
 import 'package:teams/utils/firebase_utils.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -18,7 +19,6 @@ class _AuthScreenState extends State<AuthScreen> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.grey[250],
       body: Stack(
         children: [
           Container(
@@ -26,22 +26,16 @@ class _AuthScreenState extends State<AuthScreen> {
             width: width,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xffee0000), Color(0xffeeee00)],
+                colors: Gradients.redYellow,
               ),
             ),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.white,
-                    ),
-                    child: Image.asset(
-                      ImagePaths.teamsIcon,
-                      height: 150,
-                    ),
+                  Image.asset(
+                    ImagePaths.teamsIcon,
+                    height: height / 3.5,
                   ),
                   const SizedBox(
                     height: 10,
@@ -87,7 +81,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 children: [
                   const SignInButton(
                     imagePath: ImagePaths.googleIcon,
-                    label: Values.signInWithGoogle,
+                    label: StringConstants.signInWithGoogle,
                     signInFunction: FirebaseUtils.googleSignIn,
                   ),
                   const SizedBox(
@@ -95,7 +89,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   const SignInButton(
                     imagePath: ImagePaths.anonymous,
-                    label: Values.signInAnonymous,
+                    label: StringConstants.signInAnonymous,
                     signInFunction: FirebaseUtils.signInAnonymous,
                   ),
                 ],

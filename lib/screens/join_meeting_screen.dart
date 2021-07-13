@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:teams/constants/string_constants.dart';
+import 'package:teams/screens/meet_screen/meet_screen.dart';
 import 'package:teams/theme/custom_textstyle.dart';
+import 'package:teams/theme/gradients.dart';
 import 'package:teams/utils/firebase_utils.dart';
-
-import 'meet_screen/meet_screen.dart';
+import 'package:teams/widgets/custom_button.dart';
+import 'package:teams/widgets/custom_oval_bottom.dart';
+import 'package:teams/widgets/custom_snackbars.dart';
 
 class JoinMeetingScreen extends StatefulWidget {
   const JoinMeetingScreen({Key? key}) : super(key: key);
@@ -17,145 +21,121 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 24,
-              ),
-              Text(
-                "Room code",
-                style: customTextStyle(20),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              PinCodeTextField(
-                appContext: context,
-                autoDisposeControllers: false,
-                animationType: AnimationType.fade,
-                pinTheme: PinTheme(shape: PinCodeFieldShape.underline),
-                length: 6,
-                animationDuration: const Duration(
-                  milliseconds: 300,
-                ),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (value!.length != 6) return "Enter the code properly";
-                  return "";
-                },
-                onChanged: (value) {
-                  roomCode = value;
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                style: customTextStyle(20),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: "Name (Leave if you want your username )",
-                  labelStyle: customTextStyle(15),
+      body: Stack(
+        children: [
+          ClipPath(
+            clipper: CustomOvalBottom(),
+            child: Container(
+              width: width,
+              height: height / 3,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: Gradients.indigo,
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              InkWell(
-                onTap: () async {
-                  SnackBar snackBar = SnackBar(
-                    content: Row(
-                      children: [
-                        Text(
-                          "Loading....",
-                          style: customTextStyle(
-                            20,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        const CircularProgressIndicator(),
-                      ],
-                    ),
-                    duration: const Duration(seconds: 2),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  FirebaseUtils.roomCollection
-                      .where("roomCode", isEqualTo: roomCode)
-                      .get()
-                      .then((snapShot) {
-                    if (snapShot.docs.isEmpty) {
-                      SnackBar snackBar = SnackBar(
-                        content: Text(
-                          "The room code doesn't exist! Please check the code again",
-                          style: customTextStyle(
-                            20,
-                          ),
-                        ),
-                        duration: const Duration(seconds: 3),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    } else {
-                      dynamic data = snapShot.docs[0].data();
-                      String roomId = snapShot.docs[0].id;
-                      List<String> users = data["users"].cast<String>();
-                      if (users.length != 1) {
-                        SnackBar snackBar = SnackBar(
-                          content: Text(
-                            "Meet limit exceeded",
-                            style: customTextStyle(
-                              20,
-                            ),
-                          ),
-                          duration: const Duration(seconds: 3),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } else {
-                        users.add(FirebaseUtils.auth.currentUser!.uid);
-                        FirebaseUtils.roomCollection
-                            .doc(roomId)
-                            .update({"users": users});
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MeetScreen(
-                              roomCode: roomCode,
-                              roomId: roomId,
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                  });
-                },
-                child: Container(
-                  child: Center(
-                    child: Text(
-                      "Join Meeting",
-                      style: customTextStyle(20, Colors.white),
-                    ),
-                  ),
-                  width: double.maxFinite,
-                  height: 64,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF64B5F6),
-                        Color(0xFF90CAF9),
-                        Color(0xFF42A5F5),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Container(
+            margin: EdgeInsets.only(
+              top: height / 8,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Join Meeting",
+                  style: customTextStyle(25, Colors.white, FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: height / 5,
+                  ),
+                  Text(
+                    "Room code",
+                    style: customTextStyle(20, Colors.indigoAccent),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  PinCodeTextField(
+                    appContext: context,
+                    autoDisposeControllers: false,
+                    animationType: AnimationType.fade,
+                    pinTheme: PinTheme(shape: PinCodeFieldShape.underline),
+                    length: 6,
+                    animationDuration: const Duration(
+                      milliseconds: 300,
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.length != 6) return "Enter the code properly";
+                      return "";
+                    },
+                    onChanged: (value) {
+                      roomCode = value;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  CustomButton(
+                    label: StringConstants.joinMeeting,
+                    onTap: () {
+                      FirebaseUtils.roomCollection
+                          .where(StringConstants.roomCode, isEqualTo: roomCode)
+                          .get()
+                          .then(
+                        (snapShot) {
+                          if (snapShot.docs.isEmpty) {
+                            SnackBar snackBar =
+                                customSnackBar(StringConstants.roomCodeError);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else {
+                            dynamic data = snapShot.docs[0].data();
+                            String roomId = snapShot.docs[0].id;
+                            List<String> users =
+                                data[StringConstants.users].cast<String>();
+                            if (users.length != 1) {
+                              SnackBar snackBar =
+                                  customSnackBar(StringConstants.limitExceed);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            } else {
+                              users.add(FirebaseUtils.userId());
+                              FirebaseUtils.roomCollection
+                                  .doc(roomId)
+                                  .update({StringConstants.users: users});
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MeetScreen(
+                                    roomId: roomId,
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

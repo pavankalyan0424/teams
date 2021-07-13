@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:teams/constants/values.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/theme/custom_textstyle.dart';
+import 'package:teams/widgets/custom_snackbars.dart';
 
 class SignInButton extends StatelessWidget {
   final Function signInFunction;
@@ -19,36 +20,12 @@ class SignInButton extends StatelessWidget {
     return InkWell(
       onTap: () async {
         try {
-          SnackBar snackBar = SnackBar(
-            content: Row(
-              children: [
-                Text(
-                  Values.loading,
-                  style: customTextStyle(
-                    20,
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                const CircularProgressIndicator(),
-              ],
-            ),
-            duration: const Duration(seconds: 1),
-          );
+          SnackBar snackBar = customSnackBarWithIndicator(1);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           await signInFunction();
           Navigator.pop(context);
         } catch (e) {
-          SnackBar snackBar = SnackBar(
-            content: Text(
-              Values.pleaseTryAgain,
-              style: customTextStyle(
-                20,
-              ),
-            ),
-            duration: const Duration(seconds: 2),
-          );
+          SnackBar snackBar = customSnackBar(StringConstants.pleaseTryAgain);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       },
