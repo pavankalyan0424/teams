@@ -41,13 +41,13 @@ class Messages extends StatelessWidget {
               dynamic data = totalMessages[index].data();
               return data["sentBy"] == localUid
                   ? SentMessage(
-                message: data["message"],
-                timestamp: data["timestamp"],
-              )
+                      message: data["message"],
+                      timestamp: data["timestamp"],
+                    )
                   : ReceivedMessage(
-                message: data["message"],
-                timestamp: data["timestamp"],
-              );
+                      message: data["message"],
+                      timestamp: data["timestamp"],
+                    );
             },
           );
         },

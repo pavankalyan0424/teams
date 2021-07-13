@@ -43,6 +43,9 @@ class SideDrawer extends StatelessWidget {
           Tile(
             title: 'Logout',
             onTap: () async {
+              FirebaseUtils.userCollection
+                  .doc(FirebaseUtils.auth.currentUser!.uid)
+                  .update({"online": false});
               await FirebaseUtils.signOut();
             },
           ),

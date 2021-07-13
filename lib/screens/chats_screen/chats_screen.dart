@@ -112,7 +112,12 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 hintText: "Search by Username",
               ),
             ),
-            UsersList(loading: _loading, users: _users, localUid: localUid)
+            UsersList(
+              loading: _loading,
+              users: _users,
+              localUid: localUid,
+              emptyQuery: searchController.text.isEmpty,
+            )
           ],
         ),
       ),

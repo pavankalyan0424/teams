@@ -59,6 +59,7 @@ class _DropDownState extends State<DropDown> {
           builder: (context) => ChatScreen(
             localUid: localUid,
             remoteUid: remoteUid,
+            fromMeetScreen: true,
           ),
         ),
       );

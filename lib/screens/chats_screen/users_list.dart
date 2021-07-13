@@ -8,6 +8,7 @@ class UsersList extends StatelessWidget {
     required bool loading,
     required List<Map<String, dynamic>> users,
     required this.localUid,
+    required this.emptyQuery,
   })  : _loading = loading,
         _users = users,
         super(key: key);
@@ -15,6 +16,7 @@ class UsersList extends StatelessWidget {
   final bool _loading;
   final List<Map<String, dynamic>> _users;
   final String localUid;
+  final bool emptyQuery;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,8 @@ class UsersList extends StatelessWidget {
                             builder: (context) => ChatScreen(
                               localUid: localUid,
                               remoteUid: _users[index]["uid"],
+                              fromMeetScreen: false,
+                              // remoteUserDetails: _users[index],
                             ),
                           ),
                         ),
@@ -57,7 +61,7 @@ class UsersList extends StatelessWidget {
                 )
               : Center(
                   child: Text(
-                    "No Users Found",
+                    emptyQuery ? "Search for Users" : "No users Found",
                     style: customTextStyle(20, Colors.indigo),
                   ),
                 ),

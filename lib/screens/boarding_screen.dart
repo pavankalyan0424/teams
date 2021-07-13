@@ -10,12 +10,14 @@ class BoardingScreen extends StatefulWidget {
   _BoardingScreenState createState() => _BoardingScreenState();
 }
 
-class _BoardingScreenState extends State<BoardingScreen> {
+class _BoardingScreenState extends State<BoardingScreen>
+    with WidgetsBindingObserver {
   bool _isSigned = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
     FirebaseUtils.auth.authStateChanges().listen((user) {
       if (user != null) {
         setState(() {
@@ -27,6 +29,21 @@ class _BoardingScreenState extends State<BoardingScreen> {
         });
       }
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_isSigned) {
+      if (state == AppLifecycleState.resumed) {
+        FirebaseUtils.userCollection.doc(FirebaseUtils.auth.currentUser!.uid).update({
+          "online":true
+        });
+      } else {
+        FirebaseUtils.userCollection.doc(FirebaseUtils.auth.currentUser!.uid).update({
+          "online":false
+        });
+      }
+    }
   }
 
   @override

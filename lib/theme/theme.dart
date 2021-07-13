@@ -11,7 +11,7 @@ ThemeData theme() {
       backgroundColor: Colors.white,
       iconTheme: IconThemeData(
         color: Colors.indigoAccent,
-        size: 25,
+        size: 30,
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(

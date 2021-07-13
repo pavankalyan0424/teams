@@ -58,6 +58,11 @@ class FirebaseUtils {
           "email": user.email ?? "guest@guest.com",
           "photoURL": user.photoURL ??
               "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
+          "online": true,
+        });
+      } else {
+        userCollection.doc(user.uid).update({
+          "online": true,
         });
       }
     });
