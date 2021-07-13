@@ -4,17 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:teams/constants/image_paths.dart';
+import 'package:teams/constants/values.dart';
 
 class FirebaseUtils {
   static FirebaseAuth auth = FirebaseAuth.instance;
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   static CollectionReference userCollection =
-      FirebaseFirestore.instance.collection("users");
+      FirebaseFirestore.instance.collection(Values.users);
   static CollectionReference roomCollection =
-      FirebaseFirestore.instance.collection("rooms");
+      FirebaseFirestore.instance.collection(Values.rooms);
   static CollectionReference messageCollection =
-      FirebaseFirestore.instance.collection("messages");
+      FirebaseFirestore.instance.collection(Values.messages);
 
   static Future<void> initialize() async {
     await Firebase.initializeApp();
@@ -53,16 +55,16 @@ class FirebaseUtils {
     userCollection.doc(user.uid).get().then((documentSnapshot) {
       if (!documentSnapshot.exists) {
         userCollection.doc(user.uid).set({
-          "username": user.displayName ?? "Guest${random.nextInt(900) + 100}",
-          "uid": user.uid,
-          "email": user.email ?? "guest@guest.com",
-          "photoURL": user.photoURL ??
-              "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
-          "online": true,
+          Values.username:
+              user.displayName ?? "Guest${random.nextInt(900) + 100}",
+          Values.uid: user.uid,
+          Values.email: user.email ?? "guest@guest.com",
+          Values.photoURL: user.photoURL ?? ImagePaths.anonymousFromNet,
+          Values.online: true,
         });
       } else {
         userCollection.doc(user.uid).update({
-          "online": true,
+          Values.online: true,
         });
       }
     });
