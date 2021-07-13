@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/theme/gradients.dart';
 import 'package:teams/utils/firebase_utils.dart';
@@ -52,9 +53,8 @@ class UpdateUserName extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   if (usernameController.text.isNotEmpty) {
-                    FirebaseUtils.userCollection
-                        .doc(FirebaseUtils.auth.currentUser!.uid)
-                        .update({'username': usernameController.text});
+                    FirebaseUtils.userDoc
+                        .update({StringConstants.username: usernameController.text});
                     Navigator.of(context).pop();
                   }
                 },

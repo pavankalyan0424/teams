@@ -4,26 +4,26 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:teams/constants/keys.dart';
+import 'package:teams/constants/string_constants.dart';
+import 'package:teams/screens/home_screen/home_screen.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/theme/meet_container_decoration.dart';
 import 'package:teams/utils/firebase_utils.dart';
 import 'package:teams/widgets/custom_time.dart';
 
-import '../home_screen/home_screen.dart';
 import 'dropdown.dart';
 
 class MeetScreen extends StatefulWidget {
-  final String roomCode;
   final String roomId;
 
-  const MeetScreen({Key? key, required this.roomCode, required this.roomId})
-      : super(key: key);
+  const MeetScreen({Key? key, required this.roomId}) : super(key: key);
 
   @override
   State<MeetScreen> createState() => _MeetScreenState();
 }
 
 class _MeetScreenState extends State<MeetScreen> {
+  late String roomCode;
   int _remoteUid = 0;
   late RtcEngine _engine;
   bool _userJoined = false;
@@ -34,6 +34,7 @@ class _MeetScreenState extends State<MeetScreen> {
   @override
   void initState() {
     super.initState();
+    roomCode = widget.roomId.substring(0, 6);
     initializingVariables();
   }
 
@@ -67,7 +68,7 @@ class _MeetScreenState extends State<MeetScreen> {
     configuration.dimensions = VideoDimensions(1920, 1080);
     await _engine.setVideoEncoderConfiguration(configuration);
     try {
-      await _engine.joinChannel(null, widget.roomCode, null, 0);
+      await _engine.joinChannel(null, roomCode, null, 0);
     } catch (e) {
       print("Error");
     }
@@ -159,14 +160,14 @@ class _MeetScreenState extends State<MeetScreen> {
         .get()
         .then((documentSnapshot) {
       dynamic data = documentSnapshot.data();
-      List<String> users = data["users"].cast<String>();
+      List<String> users = data[StringConstants.users].cast<String>();
       if (users.length == 1) {
         FirebaseUtils.roomCollection.doc(widget.roomId).delete();
       } else {
-        users.remove(FirebaseUtils.auth.currentUser!.uid);
+        users.remove(FirebaseUtils.userId());
         FirebaseUtils.roomCollection
             .doc(widget.roomId)
-            .update({"users": users});
+            .update({StringConstants.users: users});
       }
     });
   }
@@ -210,7 +211,7 @@ class _MeetScreenState extends State<MeetScreen> {
             children: [
               const CustomTime(),
               Text(
-                " |  ${widget.roomCode}",
+                " |  $roomCode",
                 style: customTextStyle(20, Colors.white, FontWeight.w800),
               ),
             ],
@@ -284,7 +285,7 @@ class _MeetScreenState extends State<MeetScreen> {
       return RtcRemoteView.SurfaceView(uid: _remoteUid);
     } else {
       return Text(
-        'Please wait for other user to join',
+        StringConstants.pleaseWait,
         style: customTextStyle(20, Colors.white, FontWeight.bold),
         textAlign: TextAlign.center,
       );

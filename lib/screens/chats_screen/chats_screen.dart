@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/screens/chats_screen/users_list.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
@@ -12,7 +13,7 @@ class ChatsScreen extends StatefulWidget {
 
 class _ChatsScreenState extends State<ChatsScreen> {
   final TextEditingController searchController = TextEditingController();
-  String localUid = FirebaseUtils.auth.currentUser!.uid;
+  String localUid = FirebaseUtils.userId();
   List<Map<String, dynamic>> _users = [];
   final List<Map<String, dynamic>> _chattedUsers = [];
   bool _loading = true;
@@ -25,12 +26,12 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   void getUsers() async {
     await FirebaseUtils.messageCollection
-        .where("users", arrayContains: localUid)
+        .where(StringConstants.users, arrayContains: localUid)
         .get()
         .then((collectionSnapshot) {
       for (var documentSnapshot in collectionSnapshot.docs) {
         dynamic data = documentSnapshot.data();
-        String remoteUid = data["users"]
+        String remoteUid = data[StringConstants.users]
             .singleWhere((e) => e.toString() != localUid)
             .toString();
         FirebaseUtils.userCollection.doc(remoteUid).get().then((ds) {
@@ -69,14 +70,15 @@ class _ChatsScreenState extends State<ChatsScreen> {
       _users.add(data);
     }
     if (search != "") {
-      _users.retainWhere((element) => element['username'].contains(search));
+      _users
+          .retainWhere((element) => element[StringConstants.username].contains(search));
       await FirebaseUtils.userCollection
-          .where("username", isEqualTo: search)
+          .where(StringConstants.username, isEqualTo: search)
           .get()
           .then((collectionSnapshot) {
         for (var documentSnapshot in collectionSnapshot.docs) {
           dynamic data = documentSnapshot.data();
-          if (!_users.contains(data) && data['username'] == search) {
+          if (!_users.contains(data) && data[StringConstants.username] == search) {
             _users.add(data);
           }
         }

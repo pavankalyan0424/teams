@@ -5,18 +5,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:teams/constants/image_paths.dart';
-import 'package:teams/constants/values.dart';
+import 'package:teams/constants/string_constants.dart';
 
 class FirebaseUtils {
   static FirebaseAuth auth = FirebaseAuth.instance;
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   static CollectionReference userCollection =
-      FirebaseFirestore.instance.collection(Values.users);
+      FirebaseFirestore.instance.collection(StringConstants.users);
   static CollectionReference roomCollection =
-      FirebaseFirestore.instance.collection(Values.rooms);
+      FirebaseFirestore.instance.collection(StringConstants.rooms);
   static CollectionReference messageCollection =
-      FirebaseFirestore.instance.collection(Values.messages);
+      FirebaseFirestore.instance.collection(StringConstants.messages);
+
+  static DocumentReference userDoc = userCollection.doc(userId());
 
   static Future<void> initialize() async {
     await Firebase.initializeApp();
@@ -49,22 +51,26 @@ class FirebaseUtils {
     return user;
   }
 
+  static String userId() {
+    return auth.currentUser!.uid;
+  }
+
   static Future<void> storeUserDetails(User user) async {
     //To generate random number for avoiding common names during guest login
     Random random = Random();
     userCollection.doc(user.uid).get().then((documentSnapshot) {
       if (!documentSnapshot.exists) {
         userCollection.doc(user.uid).set({
-          Values.username:
+          StringConstants.username:
               user.displayName ?? "Guest${random.nextInt(900) + 100}",
-          Values.uid: user.uid,
-          Values.email: user.email ?? "guest@guest.com",
-          Values.photoURL: user.photoURL ?? ImagePaths.anonymousFromNet,
-          Values.online: true,
+          StringConstants.uid: user.uid,
+          StringConstants.email: user.email ?? "guest@guest.com",
+          StringConstants.photoURL: user.photoURL ?? ImagePaths.anonymousFromNet,
+          StringConstants.online: true,
         });
       } else {
         userCollection.doc(user.uid).update({
-          Values.online: true,
+          StringConstants.online: true,
         });
       }
     });
@@ -72,10 +78,7 @@ class FirebaseUtils {
 
   static Future<Map<String, dynamic>> getUserDetails() async {
     Map<String, dynamic> data = {};
-    await userCollection
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((documentSnapshot) {
+    await userCollection.doc(userId()).get().then((documentSnapshot) {
       dynamic _data = documentSnapshot.data();
       data = _data.cast<String, dynamic>();
     });

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teams/constants/values.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/widgets/custom_snackbars.dart';
 
@@ -25,7 +25,7 @@ class SignInButton extends StatelessWidget {
           await signInFunction();
           Navigator.pop(context);
         } catch (e) {
-          SnackBar snackBar = customSnackBar(Values.pleaseTryAgain);
+          SnackBar snackBar = customSnackBar(StringConstants.pleaseTryAgain);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       },

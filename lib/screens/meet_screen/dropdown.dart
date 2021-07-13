@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:teams/constants/values.dart';
+import 'package:teams/constants/string_constants.dart';
+import 'package:teams/screens/chat_screen/chat_screen.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
-
-import '../chat_screen/chat_screen.dart';
 
 class DropDown extends StatefulWidget {
   final bool userJoined;
@@ -21,7 +20,7 @@ class DropDown extends StatefulWidget {
 }
 
 class _DropDownState extends State<DropDown> {
-  List<String> choices = <String>[Values.message, Values.share];
+  List<String> choices = <String>[StringConstants.messageText, StringConstants.share];
 
   @override
   Widget build(BuildContext context) {
@@ -30,25 +29,25 @@ class _DropDownState extends State<DropDown> {
       itemBuilder: (context) => [
         PopupMenuItem<String>(
           child: Text(
-            widget.userJoined ? Values.message : Values.share,
+            widget.userJoined ? StringConstants.messageText : StringConstants.share,
             style: customTextStyle(17, Colors.black),
           ),
-          value: widget.userJoined ? Values.message : Values.share,
+          value: widget.userJoined ? StringConstants.messageText : StringConstants.share,
         )
       ],
     );
   }
 
   Future<void> choiceAction(String choice) async {
-    String localUid = FirebaseUtils.auth.currentUser!.uid;
+    String localUid = FirebaseUtils.userId();
     late String remoteUid;
-    if (choice == Values.message) {
+    if (choice == StringConstants.messageText) {
       await FirebaseUtils.roomCollection
           .doc(widget.roomId)
           .get()
           .then((documentSnapShot) {
         dynamic data = documentSnapShot.data();
-        remoteUid = data["users"]
+        remoteUid = data[StringConstants.users]
             .singleWhere((e) => e.toString() != localUid)
             .toString();
       });
@@ -64,7 +63,7 @@ class _DropDownState extends State<DropDown> {
         ),
       );
     } else {
-      Share.share(Values.shareMessage + widget.roomId.substring(0, 6));
+      Share.share(StringConstants.shareMessage + widget.roomId.substring(0, 6));
     }
   }
 }

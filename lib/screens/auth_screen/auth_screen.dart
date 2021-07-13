@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teams/constants/image_paths.dart';
-import 'package:teams/constants/values.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/screens/auth_screen/signin_button.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/theme/gradients.dart';
@@ -81,7 +81,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 children: [
                   const SignInButton(
                     imagePath: ImagePaths.googleIcon,
-                    label: Values.signInWithGoogle,
+                    label: StringConstants.signInWithGoogle,
                     signInFunction: FirebaseUtils.googleSignIn,
                   ),
                   const SizedBox(
@@ -89,7 +89,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   const SignInButton(
                     imagePath: ImagePaths.anonymous,
-                    label: Values.signInAnonymous,
+                    label: StringConstants.signInAnonymous,
                     signInFunction: FirebaseUtils.signInAnonymous,
                   ),
                 ],

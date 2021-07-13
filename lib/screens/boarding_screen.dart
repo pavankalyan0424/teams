@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:teams/screens/home_screen/home_screen.dart';
 import 'package:teams/screens/intro_screen.dart';
@@ -13,12 +16,17 @@ class BoardingScreen extends StatefulWidget {
 class _BoardingScreenState extends State<BoardingScreen>
     with WidgetsBindingObserver {
   bool _isSigned = false;
+  late StreamSubscription<User?> listen;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    FirebaseUtils.auth.authStateChanges().listen((user) {
+    addFirebaseListener();
+  }
+
+  addFirebaseListener() {
+    listen = FirebaseUtils.auth.authStateChanges().listen((user) {
       if (user != null) {
         setState(() {
           _isSigned = true;
@@ -32,16 +40,18 @@ class _BoardingScreenState extends State<BoardingScreen>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    listen.cancel();
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (_isSigned) {
       if (state == AppLifecycleState.resumed) {
-        FirebaseUtils.userCollection.doc(FirebaseUtils.auth.currentUser!.uid).update({
-          "online":true
-        });
+        FirebaseUtils.userDoc.update({"online": true});
       } else {
-        FirebaseUtils.userCollection.doc(FirebaseUtils.auth.currentUser!.uid).update({
-          "online":false
-        });
+        FirebaseUtils.userDoc.update({"online": false});
       }
     }
   }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:teams/constants/string_constants.dart';
+import 'package:teams/screens/meet_screen/meet_screen.dart';
 import 'package:teams/utils/firebase_utils.dart';
 import 'package:teams/widgets/custom_button.dart';
 
-import '../meet_screen/meet_screen.dart';
 import 'instructions.dart';
+
 
 class CreateMeetingScreen extends StatefulWidget {
   const CreateMeetingScreen({Key? key}) : super(key: key);
@@ -23,18 +25,17 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
           children: [
             const Instructions(),
             CustomButton(
-              label: "Create Meeting",
+              label: StringConstants.createMeeting,
               onTap: () {
                 String roomId = FirebaseUtils.roomCollection.doc().id;
                 FirebaseUtils.roomCollection.doc(roomId).set({
-                  "roomCode": roomId.substring(0, 6),
-                  "users": [FirebaseUtils.auth.currentUser!.uid]
+                  StringConstants.roomCode: roomId.substring(0, 6),
+                  StringConstants.users: [FirebaseUtils.userId()]
                 }).then((value) {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => MeetScreen(
-                        roomCode: roomId.substring(0, 6),
                         roomId: roomId,
                       ),
                     ),

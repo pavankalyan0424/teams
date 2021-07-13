@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:teams/constants/string_constants.dart';
+import 'package:teams/screens/meet_screen/meet_screen.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 import 'package:teams/utils/firebase_utils.dart';
 import 'package:teams/widgets/custom_button.dart';
 import 'package:teams/widgets/custom_snackbars.dart';
-
-import 'meet_screen/meet_screen.dart';
 
 class JoinMeetingScreen extends StatefulWidget {
   const JoinMeetingScreen({Key? key}) : super(key: key);
@@ -57,34 +57,31 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
               height: 16,
             ),
             CustomButton(
-              label: "Join Meeting",
+              label: StringConstants.joinMeeting,
               onTap: () {
                 FirebaseUtils.roomCollection
-                    .where("roomCode", isEqualTo: roomCode)
+                    .where(StringConstants.roomCode, isEqualTo: roomCode)
                     .get()
                     .then((snapShot) {
                   if (snapShot.docs.isEmpty) {
-                    SnackBar snackBar = customSnackBar(
-                        "The room code doesn't exist! Please check the code again");
+                    SnackBar snackBar = customSnackBar(StringConstants.roomCodeError);
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else {
                     dynamic data = snapShot.docs[0].data();
                     String roomId = snapShot.docs[0].id;
-                    List<String> users = data["users"].cast<String>();
+                    List<String> users = data[StringConstants.users].cast<String>();
                     if (users.length != 1) {
-                      SnackBar snackBar =
-                          customSnackBar("Meet limit exceeded");
+                      SnackBar snackBar = customSnackBar(StringConstants.limitExceed);
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     } else {
-                      users.add(FirebaseUtils.auth.currentUser!.uid);
+                      users.add(FirebaseUtils.userId());
                       FirebaseUtils.roomCollection
                           .doc(roomId)
-                          .update({"users": users});
+                          .update({StringConstants.users: users});
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => MeetScreen(
-                            roomCode: roomCode,
                             roomId: roomId,
                           ),
                         ),

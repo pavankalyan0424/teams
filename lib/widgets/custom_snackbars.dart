@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teams/constants/values.dart';
+import 'package:teams/constants/string_constants.dart';
 import 'package:teams/theme/custom_textstyle.dart';
 
 SnackBar customSnackBar(String text) {
@@ -19,7 +19,7 @@ SnackBar customSnackBarWithIndicator([int seconds = 3]) {
     content: Row(
       children: [
         Text(
-          Values.loading,
+          StringConstants.loading,
           style: customTextStyle(
             20,
           ),
