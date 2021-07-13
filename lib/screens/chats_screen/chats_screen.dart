@@ -50,28 +50,31 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   void resetMessages() {
     String search = searchController.text;
+    setState(() {
+      _loading = true;
+      _users = [];
+    });
     if (search.isEmpty) {
-      _users.clear();
       for (var data in _chattedUsers) {
-        setState(() {
+        _users.add(data);
+      }
+    } else {
+      for (var data in _chattedUsers) {
+        if (data[StringConstants.username].contains(search)) {
           _users.add(data);
-        });
+        }
       }
     }
+    setState(() {
+      _loading = false;
+      _users = _users;
+    });
   }
 
   void searchMessage() async {
+    FocusScope.of(context).unfocus();
     String search = searchController.text;
-    setState(() {
-      _loading = true;
-    });
-    _users.clear();
-    for (var data in _chattedUsers) {
-      _users.add(data);
-    }
     if (search != "") {
-      _users.retainWhere(
-          (element) => element[StringConstants.username].contains(search));
       await FirebaseUtils.userCollection
           .where(StringConstants.username, isEqualTo: search)
           .get()
