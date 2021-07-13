@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teams/theme/custom_textstyle.dart';
+import 'package:teams/theme/gradients.dart';
 
 import 'custom_snackbars.dart';
 
@@ -32,11 +33,7 @@ class CustomButton extends StatelessWidget {
         height: 64,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Color(0xFF64B5F6),
-              Color(0xFF90CAF9),
-              Color(0xFF42A5F5),
-            ],
+            colors: Gradients.indigo,
           ),
         ),
       ),

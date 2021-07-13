@@ -9,22 +9,17 @@ class Gradients {
     Color(0xFFB00000)
   ];
 
-  static const List<Color> facebookMessenger = [
-    Color(0xFF385998),
-    Colors.white,
-  ];
-
   static const List<Color> redYellow = [
     Color(0xffee0000),
     Color(0xffeeee00),
   ];
 
-  static const List<Color> blue = [
-    Color(0xFF0000FF),
-    Color(0xFF1F1FFF),
-    Color(0xFF4949FF),
-    Color(0xFF7879FF),
-    Color(0xFFA3A3FF),
-    Color(0xFFBFBFFF),
+  static const List<Color> indigo = [
+    Color(0xFF3224FF),
+    Color(0xFF2A23E9),
+    Color(0xFF2222D3),
+    Color(0xFF1921BE),
+    Color(0xFF1120A8),
+    Color(0xFF091F92),
   ];
 }

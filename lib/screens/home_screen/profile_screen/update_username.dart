@@ -53,7 +53,8 @@ class UpdateUserName extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   if (usernameController.text.isNotEmpty) {
-                    FirebaseUtils.userDoc
+                    FirebaseUtils.userCollection
+                        .doc(FirebaseUtils.userId())
                         .update({StringConstants.username: usernameController.text});
                     Navigator.of(context).pop();
                   }

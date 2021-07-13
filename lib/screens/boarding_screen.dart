@@ -49,9 +49,12 @@ class _BoardingScreenState extends State<BoardingScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (_isSigned) {
       if (state == AppLifecycleState.resumed) {
-        FirebaseUtils.userDoc.update({"online": true});
+        FirebaseUtils.userCollection
+            .doc(FirebaseUtils.userId())
+            .update({"online": true});
       } else {
-        FirebaseUtils.userDoc.update({"online": false});
+        FirebaseUtils.userCollection
+            .doc(FirebaseUtils.userId()).update({"online": false});
       }
     }
   }

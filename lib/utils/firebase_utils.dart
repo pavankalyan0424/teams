@@ -18,8 +18,6 @@ class FirebaseUtils {
   static CollectionReference messageCollection =
       FirebaseFirestore.instance.collection(StringConstants.messages);
 
-  static DocumentReference userDoc = userCollection.doc(userId());
-
   static Future<void> initialize() async {
     await Firebase.initializeApp();
   }
@@ -65,7 +63,8 @@ class FirebaseUtils {
               user.displayName ?? "Guest${random.nextInt(900) + 100}",
           StringConstants.uid: user.uid,
           StringConstants.email: user.email ?? "guest@guest.com",
-          StringConstants.photoURL: user.photoURL ?? ImagePaths.anonymousFromNet,
+          StringConstants.photoURL:
+              user.photoURL ?? ImagePaths.anonymousFromNet,
           StringConstants.online: true,
         });
       } else {

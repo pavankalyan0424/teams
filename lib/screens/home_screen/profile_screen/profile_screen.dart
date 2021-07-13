@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: height / 2.5,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        colors: Gradients.facebookMessenger,
+                        colors: Gradients.cherry,
                       ),
                     ),
                   ),

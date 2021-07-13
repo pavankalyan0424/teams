@@ -70,15 +70,16 @@ class _ChatsScreenState extends State<ChatsScreen> {
       _users.add(data);
     }
     if (search != "") {
-      _users
-          .retainWhere((element) => element[StringConstants.username].contains(search));
+      _users.retainWhere(
+          (element) => element[StringConstants.username].contains(search));
       await FirebaseUtils.userCollection
           .where(StringConstants.username, isEqualTo: search)
           .get()
           .then((collectionSnapshot) {
         for (var documentSnapshot in collectionSnapshot.docs) {
           dynamic data = documentSnapshot.data();
-          if (!_users.contains(data) && data[StringConstants.username] == search) {
+          if (!_users.contains(data) &&
+              data[StringConstants.username] == search) {
             _users.add(data);
           }
         }

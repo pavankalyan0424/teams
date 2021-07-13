@@ -6,13 +6,13 @@ BoxDecoration meetContainerDecoration(){
     borderRadius: BorderRadius.circular(15),
     border: const Border(
       top: BorderSide(
-          width: 4, color: Colors.indigoAccent),
+          width: 6, color: Colors.indigoAccent),
       bottom: BorderSide(
-          width: 4, color: Colors.indigoAccent),
+          width: 6, color: Colors.indigoAccent),
       right: BorderSide(
-          width: 4, color: Colors.indigoAccent),
+          width: 6, color: Colors.indigoAccent),
       left: BorderSide(
-          width: 4, color: Colors.indigoAccent),
+          width: 6, color: Colors.indigoAccent),
     ),
   );
 }

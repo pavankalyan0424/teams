@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teams/constants/string_constants.dart';
+import 'package:teams/screens/boarding_screen.dart';
 import 'package:teams/screens/chats_screen/chats_screen.dart';
 import 'package:teams/screens/home_screen/profile_screen/profile_screen.dart';
 import 'package:teams/screens/home_screen/side_drawer/tile.dart';
@@ -44,8 +45,16 @@ class SideDrawer extends StatelessWidget {
           Tile(
             title: StringConstants.logout,
             onTap: () async {
-              FirebaseUtils.userDoc.update({StringConstants.online: false});
+              await FirebaseUtils.userCollection
+                  .doc(FirebaseUtils.userId())
+                  .update({StringConstants.online: false});
               await FirebaseUtils.signOut();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BoardingScreen(),
+                  ),
+                  (route) => false);
             },
           ),
         ],
